@@ -7,14 +7,35 @@
         <div class="login-card"><img class="img-fluid bg-img-cover"
             src="{% static 'assets/images/login/login_bg.jpg' %}" alt="">
           <form class="theme-form login-form " method="post">
-            <div class="login-header text-center">
-              <h4><img src="{% static 'assets/images/logoudg/texto_cusur_negro.png' %}" width="50%"></h4>
-              <h6>Unidad de Vinculación</h6>
-            </div>
-            {% csrf_token %}
-            {{form}}
+              <div class="login-header text-center">
+                  <h4><img src="{% static 'assets/images/logoudg/texto_cusur_negro.png' %}" width="50%"></h4>
+                  <h6>Unidad de Vinculación</h6>
+              </div>
+              {% csrf_token %}
+{#                          {{form}}#}
+              {% if form.errors %}
+                  <p>El usuario y contraseña no coinciden. Por favor, inténtelo de nuevo.</p>
+              {% endif %}
 
-            {% comment %} <div class="form-group">
+              {% if next %}
+                  {% if user.is_authenticated %}
+                      <p>El usuario no tiene acceso a esta página. Por favor, ingrese de nuevo con otro usuario.</p>
+                  {% else %}
+                      <p>Por favor, ingrese al sistema para ver esta página</p>
+                  {% endif %}
+              {% endif %}
+
+
+               {{ form.username.label_tag }}
+              {{ form.username }}
+
+
+                   {{ form.password.label_tag }}
+                   {{ form.password }}
+
+
+
+              {% comment %} <div class="form-group">
               <ul class="login-social">
                 <li><a href="https://www.google.com/" target="_blank">
                     <svg version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
