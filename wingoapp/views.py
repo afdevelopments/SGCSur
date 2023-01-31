@@ -1144,7 +1144,7 @@ def error_page_4(request):
 
 def login_simple(request):
     if request.method == 'POST':
-        form = AuthenticationForm(data=request.POST)
+        form = CustomAuthenticationForm(data=request.POST)
         if form.is_valid():
             user = form.get_user()
             login(request,user)
@@ -1154,7 +1154,7 @@ def login_simple(request):
             else:
                 return redirect('dashboard_ecommerce')
     else:
-        form =AuthenticationForm()
+        form =CustomAuthenticationForm()
     context={"breadcrumb":{"parent":"parent","child":"child"},"form":form}
     return render(request,'others/authentication/login/login.html',context)
 
