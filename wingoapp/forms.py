@@ -23,12 +23,13 @@ class CustomAuthenticationForm(AuthenticationForm):
 
 
 # Formulario de añadir carrera
-class AgregarCarreraForm(forms.Form):
-    nombreCarrera = forms.CharField(max_length=50)
+class CarreraForm(forms.Form):
+    nombreCarrera = forms.CharField(max_length=50, label= "Nombre de la carrera")
     divisionesMenu = [
         ("Ciencias Sociales y Humanidades", "Ciencias Sociales y Humanidades"),
         ("Ciencias Exactas, Naturales y Tecnológicas", "Ciencias Exactas, Naturales y Tecnológicas"),
         ("Ciencias de la Salud", "Ciencias de la Salud"),
     ]
-    divisionCarrera = forms.CharField(max_length=100, label="Seleccione la división de la carrera",
+    divisionCarrera = forms.CharField(max_length=100, label="División de la carrera",
                                       widget=forms.Select(choices=divisionesMenu))
+

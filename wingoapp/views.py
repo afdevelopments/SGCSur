@@ -1552,4 +1552,5 @@ def documentation_django_app(request):
 @login_required(login_url="/login")
 def carreras_agregar(request):
     context={"breadcrumb":{"parent":"Carreras","child":"Añadir"}}
-    return render(request,'carreras/carreras_agregar/carreras_agregar.html',context)
+    form = CarreraForm()
+    return render(request,'carreras/carreras_agregar/carreras_agregar.html', {'form':form})
