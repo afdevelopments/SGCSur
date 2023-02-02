@@ -8,3 +8,5 @@ rcssmin==1.1.1
 rjsmin==1.2.1
 sqlparse==0.4.3
 tzdata==2022.7
+crispy-bootstrap5
+crispy_forms
