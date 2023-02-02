@@ -368,6 +368,8 @@ urlpatterns = [
     path('knowledge_category',views.knowledge_category,name='knowledge_category'),
     path('knowledge_detail',views.knowledge_detail,name='knowledge_detail'),
 
+    # carreras
+    path('carreras_agregar', views.carreras_agregar, name ='carreras_agregar'),
     # support ticket path
 
     path('support_ticket',views.support_ticket,name='support_ticket'),

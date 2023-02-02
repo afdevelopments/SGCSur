@@ -1545,3 +1545,11 @@ def documentation_django_tree(request):
 def documentation_django_app(request):
     return render(request,'documentation/django-app.html')
 
+@login_required(login_url="/login")
+def documentation_django_app(request):
+    return render(request,'documentation/django-app.html')
+
+@login_required(login_url="/login")
+def carreras_agregar(request):
+    context={"breadcrumb":{"parent":"Carreras","child":"Añadir"}}
+    return render(request,'carreras/carreras_agregar/carreras_agregar.html',context)
