@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'wingoapp',
     'sass_processor',
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

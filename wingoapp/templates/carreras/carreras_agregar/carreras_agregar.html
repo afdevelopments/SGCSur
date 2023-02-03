@@ -3,15 +3,12 @@
 {% block content %}
 <div class="page-body">
 {% include 'layout/breadcrumb.html' %}
-
+{% csrf_token %}
   <!-- Container-fluid starts-->
   <div class="container-fluid">
     <div class="row">
       <div class="col-sm-12">
-
         {% include 'carreras/carreras_agregar/components/agregar_carrera.html' %}
-
-
       </div>
     </div>
   </div>
