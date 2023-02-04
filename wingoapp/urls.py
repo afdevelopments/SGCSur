@@ -1,5 +1,6 @@
 from django.urls import path
 from . import views
+
 urlpatterns = [
 
     # dashboard paths
@@ -43,8 +44,8 @@ urlpatterns = [
 
 
 
-
     # carreras
+    path('carreras', views.carreras_listas.as_view(template_name='carreras/carreras/carreras.html'), name ='carreras'),
     path('carreras_agregar', views.carreras_agregar, name ='carreras_agregar'),
     # support ticket path
 

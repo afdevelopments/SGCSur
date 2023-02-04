@@ -3,8 +3,15 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirect
+from django.views import generic
 from .models import *
 from .forms import *
+from django.views.generic import (
+    ListView,
+    View,
+    CreateView,
+    UpdateView, TemplateView
+)
 
 
 # dashboard pages
@@ -1603,6 +1610,11 @@ def documentation_django_app(request):
 @login_required(login_url="/login")
 def documentation_django_app(request):
     return render(request, 'documentation/django-app.html')
+
+class carreras_listas(ListView):
+    model = Carreras
+    context_object_name = 'listas_productos'
+    template_name = 'carreras/carreras/carreras.html'
 
 
 @login_required(login_url="/login")
