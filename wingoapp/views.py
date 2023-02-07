@@ -1637,7 +1637,7 @@ def carreras_eliminar(request, pk):
         carrera.delete()
         return HttpResponseRedirect(reverse('carreras'))
     context = {
-        "Carrera": carrera,
+        "carrera": carrera,
         "breadcrumb": {"parent": "Carreras", "child": "Eliminar"}
     }
     return render(request, 'carreras/carreras_eliminar/carreras_eliminar.html', context)
