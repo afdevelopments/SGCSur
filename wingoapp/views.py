@@ -1612,6 +1612,7 @@ def documentation_django_app(request):
 def documentation_django_app(request):
     return render(request, 'documentation/django-app.html')
 
+
 class carreras_listas(ListView):
     model = Carreras
     context_object_name = 'lista_carreras'
@@ -1623,9 +1624,8 @@ def carreras_agregar(request):
     if request.POST:
         form = CarreraForm(request.POST)
         if form.is_valid():
-            print(form.data)
             form.save()
-        return redirect('carreras_agregar')
+        return redirect('carreras')
     context = {"breadcrumb": {"parent": "Carreras", "child": "Añadir"}, 'form': CarreraForm}
     return render(request, 'carreras/carreras_agregar/carreras_agregar.html', context)
 
@@ -1637,6 +1637,23 @@ def carreras_eliminar(request, pk):
         carrera.delete()
         return HttpResponseRedirect(reverse('carreras'))
     context = {
-        "Carrera": carrera
+        "Carrera": carrera,
+        "breadcrumb": {"parent": "Carreras", "child": "Eliminar"}
     }
     return render(request, 'carreras/carreras_eliminar/carreras_eliminar.html', context)
+
+
+@login_required(login_url="/login")
+def carreras_modificar(request, pk):
+    carrera = get_object_or_404(Carreras, idCarrera=pk)
+    form = CarreraForm(initial={"nombreCarrera": carrera.nombreCarrera, "divisionCarrera": carrera.divisionCarrera})
+    print("AYUDA JESUS")
+    if request.POST:
+        nomcarr = request.POST['nombreCarrera']
+        divcarr = request.POST['divisionCarrera']
+        carrera.nombreCarrera = nomcarr
+        carrera.divisionCarrera = divcarr
+        carrera.save()
+        return redirect('carreras')
+    context = {"breadcrumb": {"parent": "Carreras", "child": "Modificar"}, 'form': form, "Carrera": carrera,}
+    return render(request, 'carreras/carreras_modificar/carreras_modificar.html', context)
