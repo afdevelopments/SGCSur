@@ -1647,7 +1647,6 @@ def carreras_eliminar(request, pk):
 def carreras_modificar(request, pk):
     carrera = get_object_or_404(Carreras, idCarrera=pk)
     form = CarreraForm(initial={"nombreCarrera": carrera.nombreCarrera, "divisionCarrera": carrera.divisionCarrera})
-    print("AYUDA JESUS")
     if request.POST:
         nomcarr = request.POST['nombreCarrera']
         divcarr = request.POST['divisionCarrera']
@@ -1657,3 +1656,10 @@ def carreras_modificar(request, pk):
         return redirect('carreras')
     context = {"breadcrumb": {"parent": "Carreras", "child": "Modificar"}, 'form': form, "Carrera": carrera,}
     return render(request, 'carreras/carreras_modificar/carreras_modificar.html', context)
+
+
+@login_required(login_url="/login")
+def carreras_ver(request, pk):
+    carrera = get_object_or_404(Carreras, idCarrera=pk)
+    context = {"breadcrumb": {"parent": "Carreras", "child": "Ver detalles"}, "carrera": carrera,}
+    return render(request, 'carreras/carreras_ver/carreras_ver.html', context)
