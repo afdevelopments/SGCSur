@@ -5,4 +5,7 @@ from .models import *
 
 # Register your models here.
 
-admin.site.register(Task)
+admin.site.register(Empresa)
+admin.site.register(Contacto)
+admin.site.register(Carreras)
+admin.site.register(Convenio)
