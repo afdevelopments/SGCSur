@@ -1613,7 +1613,7 @@ def documentation_django_app(request):
 
 class carreras_listas(ListView):
     model = Carreras
-    context_object_name = 'listas_productos'
+    context_object_name = 'lista_carreras'
     template_name = 'carreras/carreras/carreras.html'
 
 
