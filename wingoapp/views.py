@@ -1,9 +1,10 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirect
 from django.views import generic
+from django.urls import reverse
 from .models import *
 from .forms import *
 from django.views.generic import (
@@ -1627,3 +1628,15 @@ def carreras_agregar(request):
         return redirect('carreras_agregar')
     context = {"breadcrumb": {"parent": "Carreras", "child": "Añadir"}, 'form': CarreraForm}
     return render(request, 'carreras/carreras_agregar/carreras_agregar.html', context)
+
+
+@login_required(login_url="/login")
+def carreras_eliminar(request, pk):
+    carrera = get_object_or_404(Carreras, idCarrera=pk)
+    if request.POST:
+        carrera.delete()
+        return HttpResponseRedirect(reverse('carreras'))
+    context = {
+        "Carrera": carrera
+    }
+    return render(request, 'carreras/carreras_eliminar/carreras_eliminar.html', context)
