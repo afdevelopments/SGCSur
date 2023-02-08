@@ -47,6 +47,7 @@ urlpatterns = [
     path('carreras_agregar', views.carreras_agregar, name='carreras_agregar'),
     path('carreras_modificar/<int:pk>', views.carreras_modificar, name='carreras_modificar'),
     path('carreras_ver/<int:pk>', views.carreras_ver, name='carreras_ver'),
-    # support ticket path
 
+    # empresas
+    path('empresas_agregar', views.empresas_agregar, name ="empresas_agregar")
 ]

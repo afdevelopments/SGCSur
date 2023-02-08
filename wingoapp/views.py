@@ -1663,3 +1663,14 @@ def carreras_ver(request, pk):
     carrera = get_object_or_404(Carreras, idCarrera=pk)
     context = {"breadcrumb": {"parent": "Carreras", "child": "Ver detalles"}, "carrera": carrera,}
     return render(request, 'carreras/carreras_ver/carreras_ver.html', context)
+
+
+@login_required(login_url="/login")
+def empresas_agregar(request):
+    if request.POST:
+        form = EmpresaForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('empresas_agregar')
+    context = {"breadcrumb": {"parent": "Empresas", "child": "Añadir"}, 'form': EmpresaForm}
+    return render(request, 'empresas/empresas_agregar/empresas_agregar.html', context)

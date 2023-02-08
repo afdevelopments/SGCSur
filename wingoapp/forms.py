@@ -37,3 +37,21 @@ class CarreraForm(ModelForm):
     class Meta:
         model = Carreras
         fields = ['nombreCarrera', 'divisionCarrera']
+
+
+class EmpresaForm(ModelForm):
+    razonSocial = forms.CharField(max_length=200, label="Nombre de la empresa")
+    rfc = forms.CharField(max_length=13, label="RFC de la empresa")
+    giro = forms.CharField(max_length=50, label="Giro de la empresa")
+    sectoresMenu = [
+        ("Público", "Público"),
+        ("Privado", "Privado"),
+        ("Social", "Social"),
+        ("Educativo", "Educativo"),
+    ]
+    sectorEmpresa = forms.CharField(max_length=100, label="Sector de la empresa",
+                                    widget=forms.Select(choices=sectoresMenu))
+
+    class Meta:
+        model = Empresa
+        fields = ['razonSocial', 'rfc', 'giro', 'sectorEmpresa']
