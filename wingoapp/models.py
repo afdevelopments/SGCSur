@@ -22,10 +22,11 @@ class Empresa(models.Model):
     rfc = models.CharField(max_length=13, verbose_name='RFC',
                            help_text=mark_safe(
                                '12-13 caracteres <a href="https://www.sat.gob.mx/consultas/44083/consulta-tu-informacion-fiscal"> consulta tu RFC</a>'),
-                           validators=[RegexValidator(
-                               regex='^([A-ZÃ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$',
-                               message='El RFC deberÃ¡ tener el formato que la Servicio de AdministraciÃ³n Tributaria valida',
-                               code='invalid_RFC'), ])
+                        #    validators=[RegexValidator(
+                        #        regex='^([A-ZÃ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$',
+                        #        message='El RFC deberá tener el formato que la Servicio de Administración Tributaria valida',
+                        #        code='invalid_RFC'), ]
+                               )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
     sectores = [

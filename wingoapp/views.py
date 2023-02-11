@@ -1699,7 +1699,7 @@ def empresas_agregar(request):
         form = EmpresaForm(request.POST)
         if form.is_valid():
             form.save()
-        return redirect('empresas_agregar')
+        return redirect('empresas')
     context = {
         "breadcrumb": {"parent": "Empresas", "child": "Añadir"}, 
         'form': EmpresaForm
