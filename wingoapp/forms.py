@@ -39,6 +39,7 @@ class CarreraForm(ModelForm):
         fields = ['nombreCarrera', 'divisionCarrera']
 
 
+# Formulario de añadir empresa
 class EmpresaForm(ModelForm):
     razonSocial = forms.CharField(max_length=200, label="Nombre de la empresa")
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")

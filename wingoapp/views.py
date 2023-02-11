@@ -1613,10 +1613,16 @@ def documentation_django_app(request):
     return render(request, 'documentation/django-app.html')
 
 
-class carreras_listas(ListView):
-    model = Carreras
-    context_object_name = 'lista_carreras'
-    template_name = 'carreras/carreras/carreras.html'
+# Carreras.
+@login_required(login_url="/login")
+def carreras_listas(request):
+    lista_carreras = Carreras.objects.all()
+    print(lista_carreras)
+    context = {
+        "breadcrumb": {"parent": "Carreras"},
+        "lista_carreras": lista_carreras
+    }
+    return render(request, 'carreras/carreras/carreras.html', context)
 
 
 @login_required(login_url="/login")
@@ -1626,7 +1632,10 @@ def carreras_agregar(request):
         if form.is_valid():
             form.save()
         return redirect('carreras')
-    context = {"breadcrumb": {"parent": "Carreras", "child": "Añadir"}, 'form': CarreraForm}
+    context = {
+        "breadcrumb": {"parent": "Carreras", "child": "Añadir"}, 
+        'form': CarreraForm
+    }
     return render(request, 'carreras/carreras_agregar/carreras_agregar.html', context)
 
 
@@ -1635,7 +1644,7 @@ def carreras_eliminar(request, pk):
     carrera = get_object_or_404(Carreras, idCarrera=pk)
     if request.POST:
         carrera.delete()
-        return HttpResponseRedirect(reverse('carreras'))
+        return redirect('carreras')
     context = {
         "carrera": carrera,
         "breadcrumb": {"parent": "Carreras", "child": "Eliminar"}
@@ -1654,15 +1663,34 @@ def carreras_modificar(request, pk):
         carrera.divisionCarrera = divcarr
         carrera.save()
         return redirect('carreras')
-    context = {"breadcrumb": {"parent": "Carreras", "child": "Modificar"}, 'form': form, "Carrera": carrera,}
+    context = {
+        "breadcrumb": {"parent": "Carreras", "child": "Modificar"}, 
+        'form': form, 
+        "Carrera": carrera,
+    }
     return render(request, 'carreras/carreras_modificar/carreras_modificar.html', context)
 
 
 @login_required(login_url="/login")
 def carreras_ver(request, pk):
     carrera = get_object_or_404(Carreras, idCarrera=pk)
-    context = {"breadcrumb": {"parent": "Carreras", "child": "Ver detalles"}, "carrera": carrera,}
+    context = {
+        "breadcrumb": {"parent": "Carreras", "child": "Ver detalles"}, 
+        "carrera": carrera,
+    }
     return render(request, 'carreras/carreras_ver/carreras_ver.html', context)
+
+
+# Empresas.
+@login_required(login_url="/login")
+def empresas_listas(request):
+    lista_empresas = Empresa.objects.all()
+    print(lista_empresas)
+    context = {
+        "breadcrumb": {"parent": "Empresas"},
+        "lista_empresas": lista_empresas
+    }
+    return render(request, 'empresas/empresas/empresas.html', context)
 
 
 @login_required(login_url="/login")
@@ -1672,5 +1700,8 @@ def empresas_agregar(request):
         if form.is_valid():
             form.save()
         return redirect('empresas_agregar')
-    context = {"breadcrumb": {"parent": "Empresas", "child": "Añadir"}, 'form': EmpresaForm}
+    context = {
+        "breadcrumb": {"parent": "Empresas", "child": "Añadir"}, 
+        'form': EmpresaForm
+    }
     return render(request, 'empresas/empresas_agregar/empresas_agregar.html', context)

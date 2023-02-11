@@ -42,12 +42,13 @@ urlpatterns = [
     path('logout_view', views.logout_view, name='logout_view'),
 
     # carreras
-    path('carreras', views.carreras_listas.as_view(template_name='carreras/carreras/carreras.html'), name='carreras'),
+    path('carreras', views.carreras_listas, name='carreras'),
     path('carreras_eliminar/<int:pk>', views.carreras_eliminar, name='carreras_eliminar'),
     path('carreras_agregar', views.carreras_agregar, name='carreras_agregar'),
     path('carreras_modificar/<int:pk>', views.carreras_modificar, name='carreras_modificar'),
     path('carreras_ver/<int:pk>', views.carreras_ver, name='carreras_ver'),
 
     # empresas
+    path('empresas', views.empresas_listas, name='empresas'),
     path('empresas_agregar', views.empresas_agregar, name ="empresas_agregar")
 ]
