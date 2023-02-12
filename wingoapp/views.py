@@ -1705,3 +1705,26 @@ def empresas_agregar(request):
         'form': EmpresaForm
     }
     return render(request, 'empresas/empresas_agregar/empresas_agregar.html', context)
+
+
+@login_required(login_url="/login")
+def empresas_modificar(request, pk):
+    empresa = get_object_or_404(Empresa, idEmpresa=pk)
+    form = EmpresaForm(initial={"razonSocial": empresa.razonSocial, "rfc": empresa.rfc, "giro": empresa.giro, "sectorEmpresa": empresa.sectorEmpresa})
+    if request.POST:
+        nomEmpresa = request.POST['razonSocial']
+        rfcEmpresa = request.POST['rfc']
+        giroEmpresa = request.POST['giro']
+        sector = request.POST['sectorEmpresa']
+        empresa.razonSocial = nomEmpresa
+        empresa.rfc = rfcEmpresa
+        empresa.giro = giroEmpresa
+        empresa.sectorEmpresa = sector
+        empresa.save()
+        return redirect('empresas')
+    context = {
+        "breadcrumb": {"parent": "Empresas", "child": "Modificar"}, 
+        'form': form, 
+        "Empresa": empresa,
+    }
+    return render(request, 'empresas/empresas_modificar/empresas_modificar.html', context)

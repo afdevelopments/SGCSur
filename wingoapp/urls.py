@@ -50,5 +50,6 @@ urlpatterns = [
 
     # empresas
     path('empresas', views.empresas_listas, name='empresas'),
-    path('empresas_agregar', views.empresas_agregar, name ="empresas_agregar")
+    path('empresas_agregar', views.empresas_agregar, name ="empresas_agregar"),
+    path('empresas_modificar/<int:pk>', views.empresas_modificar, name='empresas_modificar'),
 ]
