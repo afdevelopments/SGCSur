@@ -1619,7 +1619,7 @@ def carreras_listas(request):
     lista_carreras = Carreras.objects.all()
     print(lista_carreras)
     context = {
-        "breadcrumb": {"parent": "Carreras"},
+        "breadcrumb": {"parent": "Carreras", "child": "Ver"},
         "lista_carreras": lista_carreras
     }
     return render(request, 'carreras/carreras/carreras.html', context)
@@ -1687,7 +1687,7 @@ def empresas_listas(request):
     lista_empresas = Empresa.objects.all()
     print(lista_empresas)
     context = {
-        "breadcrumb": {"parent": "Empresas"},
+        "breadcrumb": {"parent": "Empresas", "child": "Ver"},
         "lista_empresas": lista_empresas
     }
     return render(request, 'empresas/empresas/empresas.html', context)
@@ -1728,3 +1728,16 @@ def empresas_modificar(request, pk):
         "Empresa": empresa,
     }
     return render(request, 'empresas/empresas_modificar/empresas_modificar.html', context)
+
+
+@login_required(login_url="/login")
+def empresas_eliminar(request, pk):
+    empresa = get_object_or_404(Empresa, idEmpresa=pk)
+    if request.POST:
+        empresa.delete()
+        return redirect('empresas')
+    context = {
+        "empresa": empresa,
+        "breadcrumb": {"parent": "Empresas", "child": "Eliminar"}
+    }
+    return render(request, 'empresas/empresas_eliminar/empresas_eliminar.html', context)
