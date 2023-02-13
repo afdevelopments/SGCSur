@@ -1,0 +1,18 @@
+{% load static %}
+{% load sass_tags %}
+{% load crispy_forms_tags %}
+<div class="card">
+    <div class="card-header pb-0">
+        <h4>Detalles de empresa</h4><span>Detalles de la empresa de {{ empresa.razonSocial.lower }}</span>
+    </div>
+    <div class="card-body">
+        <h5>Id de la empresa: </h5> {{ empresa.idEmpresa }}
+        <h5>Razón social</h5> {{ empresa.razonSocial }}
+        <h5>RFC</h5> {{ empresa.rfc }}
+        <h5>Giro</h5> {{ empresa.giro }}
+        <h5>Sector</h5> {{ empresa.sectorEmpresa }}
+    </div>
+    <div class="card-body">
+        <button class="btn crispy_forms btn-primary">Regresar</button>
+    </div>
+</div>

@@ -879,7 +879,7 @@ def bonus_ui_tree(request):
     context = {"breadcrumb": {"parent": "Bonus Ui", "child": "Tree"}}
     return render(request, 'bonus_ui/tree/tree.html', context)
 
-    # bonus ui timeline 
+    # bonus ui timeline
 
 
 @login_required(login_url="/login")
@@ -1182,7 +1182,7 @@ def error_page_4(request):
     context = {"breadcrumb": {"parent": "parent", "child": "child"}}
     return render(request, 'others/error_page/error-page4/error-page4.html', context)
 
-    # authentication 
+    # authentication
 
 
 def login_simple(request):
@@ -1633,7 +1633,7 @@ def carreras_agregar(request):
             form.save()
         return redirect('carreras')
     context = {
-        "breadcrumb": {"parent": "Carreras", "child": "Añadir"}, 
+        "breadcrumb": {"parent": "Carreras", "child": "Añadir"},
         'form': CarreraForm
     }
     return render(request, 'carreras/carreras_agregar/carreras_agregar.html', context)
@@ -1664,8 +1664,8 @@ def carreras_modificar(request, pk):
         carrera.save()
         return redirect('carreras')
     context = {
-        "breadcrumb": {"parent": "Carreras", "child": "Modificar"}, 
-        'form': form, 
+        "breadcrumb": {"parent": "Carreras", "child": "Modificar"},
+        'form': form,
         "Carrera": carrera,
     }
     return render(request, 'carreras/carreras_modificar/carreras_modificar.html', context)
@@ -1675,7 +1675,7 @@ def carreras_modificar(request, pk):
 def carreras_ver(request, pk):
     carrera = get_object_or_404(Carreras, idCarrera=pk)
     context = {
-        "breadcrumb": {"parent": "Carreras", "child": "Ver detalles"}, 
+        "breadcrumb": {"parent": "Carreras", "child": "Ver detalles"},
         "carrera": carrera,
     }
     return render(request, 'carreras/carreras_ver/carreras_ver.html', context)
@@ -1701,7 +1701,7 @@ def empresas_agregar(request):
             form.save()
         return redirect('empresas')
     context = {
-        "breadcrumb": {"parent": "Empresas", "child": "Añadir"}, 
+        "breadcrumb": {"parent": "Empresas", "child": "Añadir"},
         'form': EmpresaForm
     }
     return render(request, 'empresas/empresas_agregar/empresas_agregar.html', context)
@@ -1723,8 +1723,8 @@ def empresas_modificar(request, pk):
         empresa.save()
         return redirect('empresas')
     context = {
-        "breadcrumb": {"parent": "Empresas", "child": "Modificar"}, 
-        'form': form, 
+        "breadcrumb": {"parent": "Empresas", "child": "Modificar"},
+        'form': form,
         "Empresa": empresa,
     }
     return render(request, 'empresas/empresas_modificar/empresas_modificar.html', context)
@@ -1741,3 +1741,12 @@ def empresas_eliminar(request, pk):
         "breadcrumb": {"parent": "Empresas", "child": "Eliminar"}
     }
     return render(request, 'empresas/empresas_eliminar/empresas_eliminar.html', context)
+
+@login_required(login_url="/login")
+def empresas_ver(request, pk):
+    empresa = get_object_or_404(Empresa, idEmpresa=pk)
+    context = {
+        "breadcrumb": {"parent": "Empresas", "child": "Ver detalles"},
+        "empresa": empresa,
+    }
+    return render(request, 'empresas/empresas_ver/empresas_ver.html', context)

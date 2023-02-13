@@ -53,4 +53,5 @@ urlpatterns = [
     path('empresas_agregar', views.empresas_agregar, name ="empresas_agregar"),
     path('empresas_modificar/<int:pk>', views.empresas_modificar, name='empresas_modificar'),
     path('empresas_eliminar/<int:pk>', views.empresas_eliminar, name='empresas_eliminar'),
+    path('empresas_ver/<int:pk>', views.empresas_ver, name='empresas_ver'),
 ]
