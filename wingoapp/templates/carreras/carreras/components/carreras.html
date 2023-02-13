@@ -7,14 +7,13 @@
   </div>
     <div class="card-body">
          {% if lista_carreras %}
-    <div class="table-responsive">
-            <div id="basic-1_wrapper" class="dataTables_wrapper no-footer"><div class="dataTables_length" id="basic-1_length"><label>Show <select name="basic-1_length" aria-controls="basic-1" class=""><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label></div><div id="basic-1_filter" class="dataTables_filter"><label>Search:<input type="search" class="" placeholder="" aria-controls="basic-1"></label></div><table class="display dataTable no-footer" id="basic-1" role="grid" aria-describedby="basic-1_info">
+          <div class="table-responsive">
+            <table class="display" id="basic-2">
               <thead>
                 <tr role="row"><th class="sorting_asc" tabindex="0" aria-controls="basic-1" rowspan="1" colspan="1" aria-sort="ascending" aria-label="Name: activate to sort column descending" style="width: 249.266px;">ID Carrera</th>
                     <th class="sorting" tabindex="0" aria-controls="basic-1" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" style="width: 398.453px;">Nombre de Carrera</th>
                     <th class="sorting" tabindex="0" aria-controls="basic-1" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 191.422px;">División de Carrera</th>
                     <th class="sorting" tabindex="0" aria-controls="basic-1" rowspan="1" colspan="1" aria-label="Office: activate to sort column ascending" style="width: 191.422px;">Acciones</th>
-
                 </tr>
               </thead>
               <tbody>
@@ -29,10 +28,11 @@
                       <a class="dropdown-item" href="{% url 'carreras_ver' carrera.idCarrera %}">Ver detalles</a>
                       <a class="dropdown-item" href="{% url 'carreras_modificar' carrera.idCarrera %}">Modificar</a>
                       <a class="dropdown-item" href="{% url 'carreras_eliminar' carrera.idCarrera %}">Eliminar</a>
-                        </div></td>
+                        </div>
+                      </td>
                 </tr>
                 {% endfor %}
-            </table><div class="dataTables_info" id="basic-1_info" role="status" aria-live="polite">Showing 1 to 10 of 57 entries</div><div class="dataTables_paginate paging_simple_numbers" id="basic-1_paginate"><a class="paginate_button previous disabled" aria-controls="basic-1" data-dt-idx="0" tabindex="0" id="basic-1_previous">Previous</a><span><a class="paginate_button current" aria-controls="basic-1" data-dt-idx="1" tabindex="0">1</a><a class="paginate_button " aria-controls="basic-1" data-dt-idx="2" tabindex="0">2</a><a class="paginate_button " aria-controls="basic-1" data-dt-idx="3" tabindex="0">3</a><a class="paginate_button " aria-controls="basic-1" data-dt-idx="4" tabindex="0">4</a><a class="paginate_button " aria-controls="basic-1" data-dt-idx="5" tabindex="0">5</a><a class="paginate_button " aria-controls="basic-1" data-dt-idx="6" tabindex="0">6</a></span><a class="paginate_button next" aria-controls="basic-1" data-dt-idx="7" tabindex="0" id="basic-1_next">Next</a></div></div>
+            </table>
           </div>
         {% else %}
                                 <div class="alert alert-primary d-flex align-items-center" role="alert">
@@ -41,28 +41,10 @@
                                          role="img" aria-label="Warning:">
                                         <path d="M8.982 1.566a1.13 1.13 0 0 0-1.96 0L.165 13.233c-.457.778.091 1.767.98 1.767h13.713c.889 0 1.438-.99.98-1.767L8.982 1.566zM8 5c.535 0 .954.462.9.995l-.35 3.507a.552.552 0 0 1-1.1 0L7.1 5.995A.905.905 0 0 1 8 5zm.002 6a1 1 0 1 1 0 2 1 1 0 0 1 0-2z"></path>
                                     </svg>
-                                    <div>nom
+                                    <div>
                                         No existen registros de carreras
                                     </div>
                                 </div>
                             {% endif %}
-
-
         </div>
-
 </div>
-{% block javascripts %}
-    <script>
-        // Basic example
-        $(document).ready(function () {
-            $('#table-responsive').DataTable({
-                "rowReorder": true,
-                "language": {
-                    "url": "//cdn.datatables.net/plug-ins/1.10.16/i18n/Spanish.json"
-                },
-                "searching": true, // false to disable search (or any other option)
-
-            });
-        });
-    </script>
-{% endblock javascripts %}

@@ -3,9 +3,9 @@ $(document).ready(function () {
   // Basic table example
   $("#basic-1").DataTable();
   $("#basic-2").DataTable({
-    paging: true,
-    ordering: false,
-    info: false,
+    language: {
+      url: "/wingo/wingoapp/static/assets/json/Spanish.json",
+    },
   });
   $("#basic-3").DataTable({
     order: [[3, "desc"]],
