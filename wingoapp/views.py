@@ -1685,7 +1685,6 @@ def carreras_ver(request, pk):
 @login_required(login_url="/login")
 def empresas_listas(request):
     lista_empresas = Empresa.objects.all()
-    print(lista_empresas)
     context = {
         "breadcrumb": {"parent": "Empresas", "child": "Ver"},
         "lista_empresas": lista_empresas
@@ -1710,7 +1709,8 @@ def empresas_agregar(request):
 @login_required(login_url="/login")
 def empresas_modificar(request, pk):
     empresa = get_object_or_404(Empresa, idEmpresa=pk)
-    form = EmpresaForm(initial={"razonSocial": empresa.razonSocial, "rfc": empresa.rfc, "giro": empresa.giro, "sectorEmpresa": empresa.sectorEmpresa})
+    form = EmpresaForm(initial={"razonSocial": empresa.razonSocial, "rfc": empresa.rfc, "giro": empresa.giro,
+                                "sectorEmpresa": empresa.sectorEmpresa})
     if request.POST:
         nomEmpresa = request.POST['razonSocial']
         rfcEmpresa = request.POST['rfc']
@@ -1742,6 +1742,7 @@ def empresas_eliminar(request, pk):
     }
     return render(request, 'empresas/empresas_eliminar/empresas_eliminar.html', context)
 
+
 @login_required(login_url="/login")
 def empresas_ver(request, pk):
     empresa = get_object_or_404(Empresa, idEmpresa=pk)
@@ -1750,3 +1751,13 @@ def empresas_ver(request, pk):
         "empresa": empresa,
     }
     return render(request, 'empresas/empresas_ver/empresas_ver.html', context)
+
+
+@login_required(login_url="/login")
+def contactos_listas(request):
+    lista_contactos = Contacto.objects.all()
+    context = {
+        "breadcrumb": {"parent": "Contactos", "child": "Ver"},
+        "lista_contactos": lista_contactos
+    }
+    return render(request, 'contactos/contactos/contactos.html', context)

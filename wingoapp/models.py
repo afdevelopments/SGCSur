@@ -42,10 +42,10 @@ class Empresa(models.Model):
 
 class Contacto(models.Model):
     idContacto = models.AutoField(primary_key=True, verbose_name='ID del contacto')
-    nombre = models.CharField(verbose_name='Nombre del Cliente', max_length=50,
-                              help_text="Ingrese el nombre del cliente")
+    nombre = models.CharField(verbose_name='Nombre del contacto', max_length=50,
+                              help_text="Ingrese el nombre del contacto")
     numTelefono = models.CharField(max_length=10,
-                                   help_text="Ingrese el número de teléfono del cliente", verbose_name='Número de '
+                                   help_text="Ingrese el número de teléfono del contacto", verbose_name='Número de '
                                                                                                        'Teléfono',
                                    validators=[RegexValidator(
                                        regex='(\(\d{3}\)[.-]?|\d{3}[.-]?)?\d{3}[.-]?\d{4}',
