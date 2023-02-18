@@ -57,4 +57,11 @@ urlpatterns = [
 
     # contactos
     path('contactos', views.contactos_listas, name='contactos'),
+    path('contactos_agregar', views.contactos_agregar, name='contactos_agregar'),
+    path('contactos_modificar/<int:pk>', views.contactos_modificar, name='contactos_modificar'),
+    path('contactos_eliminar/<int:pk>', views.contactos_eliminar, name='contactos_eliminar'),
+    path('contactos_ver/<int:pk>', views.contactos_ver, name='contactos_ver'),
+
+
+
 ]

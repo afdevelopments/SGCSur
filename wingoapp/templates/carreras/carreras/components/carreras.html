@@ -2,46 +2,50 @@
 {% load sass_tags %}
 {% load crispy_forms_tags %}
 <div class="card">
-  <div class="card-header pb-0">
-    <h5>Carreras</h5><span>Listas de las carreras existentes en el sistema.</span>
-  </div>
+    <div class="card-header pb-0">
+        <h5>Carreras</h5><span>Listas de las carreras existentes en el sistema.</span>
+    </div>
     <div class="card-body">
-         {% if lista_carreras %}
-          <div class="table-primary">
-            <table class="display" id="basic-2">
-              <thead>
-                <tr>
-                  <th>ID Carrera</th>
-                    <th>Nombre de Carrera</th>
-                    <th>División de Carrera</th>
-                    <th>Acciones</th>
-                </tr>
-              </thead>
-              <tbody>
-              {%  for carrera in lista_carreras %}
-              <tr>
-                  <td>{{ carrera.idCarrera }}</td>
-                  <td>{{ carrera.nombreCarrera }}</td>
-                  <td>{{ carrera.divisionCarrera }}</td>
-                  <td><button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
-                  <div class="dropdown-menu" style="">
-                          <h6 class="dropdown-header">Seleccione la opción</h6>
-                      <a class="dropdown-item" href="{% url 'carreras_ver' carrera.idCarrera %}">Ver detalles</a>
-                      <a class="dropdown-item" href="{% url 'carreras_modificar' carrera.idCarrera %}">Modificar</a>
-                      <a class="dropdown-item" href="{% url 'carreras_eliminar' carrera.idCarrera %}">Eliminar</a>
-                        </div>
-                      </td>
-                </tr>
-                {% endfor %}
-            </table>
-          </div>
+        {% if lista_carreras %}
+            <div class="table-primary">
+                <table class="display" id="basic-2">
+                    <thead>
+                    <tr>
+                        <th>ID Carrera</th>
+                        <th>Nombre de Carrera</th>
+                        <th>División de Carrera</th>
+                        <th>Acciones</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for carrera in lista_carreras %}
+                        <tr>
+                            <td>{{ carrera.idCarrera }}</td>
+                            <td>{{ carrera.nombreCarrera }}</td>
+                            <td>{{ carrera.divisionCarrera }}</td>
+                            <td>
+                                <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                                        aria-haspopup="true" aria-expanded="false">Acciones
+                                </button>
+                                <div class="dropdown-menu" style="">
+                                    <h6 class="dropdown-header">Seleccione la opción</h6>
+                                    <a class="dropdown-item" href="{% url 'carreras_ver' carrera.idCarrera %}">Ver
+                                        detalles</a>
+                                    <a class="dropdown-item" href="{% url 'carreras_modificar' carrera.idCarrera %}">Modificar</a>
+                                    <a class="dropdown-item" href="{% url 'carreras_eliminar' carrera.idCarrera %}">Eliminar</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            </div>
         {% else %}
-        <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
-              <p><b> Sin registros! </b>No existen registros de carreras</p>
-              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span
-                  class="bg-warning" aria-hidden="true">dismiss</span></button>
+            <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
+                <p><b> Sin registros! </b>No existen registros de carreras</p>
+                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span
+                        class="bg-warning" aria-hidden="true">dismiss</span></button>
             </div>
 
-                            {% endif %}
-        </div>
+        {% endif %}
+    </div>
 </div>

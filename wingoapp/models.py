@@ -21,12 +21,15 @@ class Empresa(models.Model):
                                    help_text="Ingrese la razón social de la empresa")
     rfc = models.CharField(max_length=13, verbose_name='RFC',
                            help_text=mark_safe(
-                               '12-13 caracteres <a href="https://www.sat.gob.mx/consultas/44083/consulta-tu-informacion-fiscal"> consulta tu RFC</a>'),
-                        #    validators=[RegexValidator(
-                        #        regex='^([A-ZÃ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?(?:- ?)?([A-Z\d]{2})([A\d])$',
-                        #        message='El RFC deberá tener el formato que la Servicio de Administración Tributaria valida',
-                        #        code='invalid_RFC'), ]
-                               )
+                               '12-13 caracteres <a href="https://www.sat.gob.mx/consultas/44083/consulta-tu'
+                               '-informacion-fiscal"> consulta tu RFC</a>'),
+                           validators=[RegexValidator(
+                               regex='^([A-ZÃ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?('
+                                     '?:- ?)?([A-Z\d]{2})([A\d])$',
+                               message='El RFC deberá tener el formato que la Servicio de Administración Tributaria '
+                                       'valida',
+                               code='invalid_RFC'), ]
+                           )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
     sectores = [
@@ -39,6 +42,8 @@ class Empresa(models.Model):
                                      help_text="Ingrese el sector", verbose_name='Sector de la empresa'
                                      )
 
+    def __str__(self):
+        return self.razonSocial
 
 class Contacto(models.Model):
     idContacto = models.AutoField(primary_key=True, verbose_name='ID del contacto')
@@ -46,7 +51,7 @@ class Contacto(models.Model):
                               help_text="Ingrese el nombre del contacto")
     numTelefono = models.CharField(max_length=10,
                                    help_text="Ingrese el número de teléfono del contacto", verbose_name='Número de '
-                                                                                                       'Teléfono',
+                                                                                                        'Teléfono',
                                    validators=[RegexValidator(
                                        regex='(\(\d{3}\)[.-]?|\d{3}[.-]?)?\d{3}[.-]?\d{4}',
                                        message='El número es inválido.',
@@ -54,6 +59,8 @@ class Contacto(models.Model):
     idEmpresa = models.ForeignKey(Empresa, on_delete=models.CASCADE,
                                   help_text="Seleccione la empresa", verbose_name='Empresa'
                                   )
+    def __str__(self):
+        return self.nombre
 
 
 class Carreras(models.Model):
@@ -70,8 +77,8 @@ class Carreras(models.Model):
                                        help_text="Ingrese la división de la carrera",
                                        verbose_name='División de la carrera'
                                        )
-
-
+    def __str__(self):
+        return self.nombreCarrera
 class Convenio(models.Model):
     numConvenio = models.AutoField(primary_key=True, verbose_name='Número de convenio')
     idCarrera = models.ForeignKey(Carreras, on_delete=models.CASCADE, help_text="Seleccione la carrera",
@@ -82,3 +89,5 @@ class Convenio(models.Model):
     idEmpresa = models.ForeignKey(Empresa, on_delete=models.CASCADE,
                                   help_text="Seleccione la empresa", verbose_name='Empresa'
                                   )
+    def __str__(self):
+        return self.numConvenio

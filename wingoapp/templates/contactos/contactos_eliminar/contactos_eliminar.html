@@ -1,0 +1,22 @@
+{% extends 'base.html' %}{% load static %}
+{% load sass_tags %}
+{% block content %}
+<div class="page-body">
+{% include 'layout/breadcrumb.html' %}
+{% csrf_token %}
+  <!-- Container-fluid starts-->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-sm-12">
+        {% include 'contactos/contactos_eliminar/components/eliminar_contacto.html' %}
+      </div>
+    </div>
+  </div>
+  <!-- Container-fluid Ends-->
+</div>
+{% endblock content %}
+{% block scriptcontent %}
+<!-- Plugins JS start-->
+<script src="{% static 'assets/js/form-validation-custom.js' %}"></script>
+<!-- Plugins JS Ends-->
+{% endblock scriptcontent %}

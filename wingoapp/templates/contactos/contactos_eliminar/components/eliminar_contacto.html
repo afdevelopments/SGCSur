@@ -1,0 +1,20 @@
+{% load static %}
+{% load sass_tags %}
+{% load crispy_forms_tags %}
+<div class="card">
+  <div class="card-header pb-0">
+    <h5>Confirmación de eliminación</h5>
+  </div>
+    <form class="form theme-form" method="post" enctype="multipart/form-data">
+        <div class="card-body">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="alert alert-primary d-flex align-items-center" role="alert">
+                    ¿Está seguro que desea eliminar la carrera de {{ contacto.nombre }} con id {{ contacto.idContacto }}?
+            </div>
+            <hr>
+            <a class="btn crispy_forms btn-danger" href={% url 'carreras' %} class="">Cancelar</a>
+            <button class="btn crispy_forms btn-primary" type="submit">Confirmar</button>
+        </div>
+    </form>
+</div>

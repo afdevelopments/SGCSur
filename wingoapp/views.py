@@ -1752,7 +1752,8 @@ def empresas_ver(request, pk):
     }
     return render(request, 'empresas/empresas_ver/empresas_ver.html', context)
 
-
+#Contactos.
+#Contactos listas.
 @login_required(login_url="/login")
 def contactos_listas(request):
     lista_contactos = Contacto.objects.all()
@@ -1761,3 +1762,62 @@ def contactos_listas(request):
         "lista_contactos": lista_contactos
     }
     return render(request, 'contactos/contactos/contactos.html', context)
+#Contactos agregar.
+@login_required(login_url="/login")
+def contactos_agregar(request):
+    if request.POST:
+        form = ContactoForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('contactos')
+    context = {
+        "breadcrumb": {"parent": "Contactos", "child": "Añadir"},
+        'form': ContactoForm
+    }
+    return render(request, 'contactos/contactos_agregar/contactos_agregar.html', context)
+
+#Contactos modificar.
+@login_required(login_url="/login")
+def contactos_modificar(request, pk):
+    contacto = get_object_or_404(Contacto, idContacto=pk)
+    form = ContactoForm(initial={"nombre": contacto.nombre, "numTelefono": contacto.numTelefono, "idEmpresa": contacto.idEmpresa.razonSocial})
+
+    if request.POST:
+        nombre = request.POST['nombre']
+        numTelefono = request.POST['numTelefono']
+        empresa_cadena = request.POST['idEmpresa']
+        idEmpresa = Empresa.objects.get(idEmpresa=empresa_cadena)
+        contacto.nombre = nombre
+        contacto.numTelefono = numTelefono
+        contacto.idEmpresa = idEmpresa
+        contacto.save()
+        return redirect('contactos')
+    context = {
+        "breadcrumb": {"parent": "Contactos", "child": "Modificar"},
+        'form': form,
+        "Contacto": contacto,
+    }
+    return render(request, 'contactos/contactos_modificar/contactos_modificar.html', context)
+
+#Contactos eliminar.
+@login_required(login_url="/login")
+def contactos_eliminar(request, pk):
+    contacto = get_object_or_404(Contacto, idContacto=pk)
+    if request.POST:
+        contacto.delete()
+        return redirect('contactos')
+    context = {
+        "contacto": contacto,
+        "breadcrumb": {"parent": "Contactos", "child": "Eliminar"}
+    }
+    return render(request, 'contactos/contactos_eliminar/contactos_eliminar.html', context)
+
+#Contactos ver.
+@login_required(login_url="/login")
+def contactos_ver(request, pk):
+    contacto = get_object_or_404(Contacto, idContacto=pk)
+    context = {
+        "breadcrumb": {"parent": "Contactos", "child": "Ver detalles"},
+        "contacto": contacto,
+    }
+    return render(request, 'contactos/contactos_ver/contactos_ver.html', context)
