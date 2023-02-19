@@ -1,0 +1,15 @@
+{% load static %}
+{% load sass_tags %}
+{% load crispy_forms_tags %}
+<div class="card">
+  <div class="card-header pb-0">
+    <h5>Añadir</h5><span>Para agregar un contacto, por favor rellene el siguiente formulario.</span>
+  </div>
+    <form class="form theme-form" method="post" action="{% url 'contactos_agregar' %}" enctype="multipart/form-data">
+        <div class="card-body">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <button class="btn crispy_forms btn-primary" type="submit">Añadir</button>
+        </div>
+    </form>
+</div>

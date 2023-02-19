@@ -1762,6 +1762,7 @@ def contactos_listas(request):
         "lista_contactos": lista_contactos
     }
     return render(request, 'contactos/contactos/contactos.html', context)
+
 #Contactos agregar.
 @login_required(login_url="/login")
 def contactos_agregar(request):

@@ -23,12 +23,12 @@ class Empresa(models.Model):
                            help_text=mark_safe(
                                '12-13 caracteres <a href="https://www.sat.gob.mx/consultas/44083/consulta-tu'
                                '-informacion-fiscal"> consulta tu RFC</a>'),
-                           validators=[RegexValidator(
-                               regex='^([A-ZÃ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?('
-                                     '?:- ?)?([A-Z\d]{2})([A\d])$',
-                               message='El RFC deberá tener el formato que la Servicio de Administración Tributaria '
-                                       'valida',
-                               code='invalid_RFC'), ]
+                        #    validators=[RegexValidator(
+                        #        regex='^([A-ZÃ&]{3,4}) ?(?:- ?)?(\d{2}(?:0[1-9]|1[0-2])(?:0[1-9]|[12]\d|3[01])) ?('
+                        #              '?:- ?)?([A-Z\d]{2})([A\d])$',
+                        #        message='El RFC deberá tener el formato que la Servicio de Administración Tributaria '
+                        #                'valida',
+                        #        code='invalid_RFC'), ]
                            )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
@@ -52,10 +52,11 @@ class Contacto(models.Model):
     numTelefono = models.CharField(max_length=10,
                                    help_text="Ingrese el número de teléfono del contacto", verbose_name='Número de '
                                                                                                         'Teléfono',
-                                   validators=[RegexValidator(
-                                       regex='(\(\d{3}\)[.-]?|\d{3}[.-]?)?\d{3}[.-]?\d{4}',
-                                       message='El número es inválido.',
-                                       code='invalid_number'), ])
+                                #    validators=[RegexValidator(
+                                #        regex='(\(\d{3}\)[.-]?|\d{3}[.-]?)?\d{3}[.-]?\d{4}',
+                                #        message='El número es inválido.',
+                                #        code='invalid_number'), ]
+                                    )
     idEmpresa = models.ForeignKey(Empresa, on_delete=models.CASCADE,
                                   help_text="Seleccione la empresa", verbose_name='Empresa'
                                   )
