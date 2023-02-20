@@ -11,20 +11,20 @@
             <table class="display" id="basic-2">
               <thead>
                 <tr>
-                  <th>ID Contacto</th>
                     <th>Nombre del contacto</th>
                     <th>Número de teléfono</th>
                     <th>Empresa</th>
+                    <th>Email</th>
                     <th>Acciones</th>
                 </tr>
               </thead>
               <tbody>
               {%  for contacto in lista_contactos %}
               <tr>
-                  <td>{{ contacto.idContacto }}</td>
                   <td>{{ contacto.nombre }}</td>
                   <td>{{ contacto.numTelefono }}</td>
                   <td>{{ contacto.idEmpresa.razonSocial }}</td>
+                  <td>{{ contacto.email }}</td>
                   <td><button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
                   <div class="dropdown-menu" style="">
                           <h6 class="dropdown-header">Seleccione la opción</h6>

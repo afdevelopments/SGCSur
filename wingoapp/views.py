@@ -1781,16 +1781,19 @@ def contactos_agregar(request):
 @login_required(login_url="/login")
 def contactos_modificar(request, pk):
     contacto = get_object_or_404(Contacto, idContacto=pk)
-    form = ContactoForm(initial={"nombre": contacto.nombre, "numTelefono": contacto.numTelefono, "idEmpresa": contacto.idEmpresa.razonSocial})
+    form = ContactoForm(initial={"nombre": contacto.nombre, "numTelefono": contacto.numTelefono,
+                                 "idEmpresa": contacto.idEmpresa.razonSocial, "email": contacto.email})
 
     if request.POST:
         nombre = request.POST['nombre']
         numTelefono = request.POST['numTelefono']
         empresa_cadena = request.POST['idEmpresa']
+        email = request.POST['email']
         idEmpresa = Empresa.objects.get(idEmpresa=empresa_cadena)
         contacto.nombre = nombre
         contacto.numTelefono = numTelefono
         contacto.idEmpresa = idEmpresa
+        contacto.email = email
         contacto.save()
         return redirect('contactos')
     context = {
