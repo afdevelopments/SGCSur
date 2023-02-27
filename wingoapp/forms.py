@@ -51,9 +51,10 @@ class EmpresaForm(ModelForm):
     razonSocial = forms.CharField(max_length=200, label="Nombre de la empresa")
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
-    paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
-    paisEmpresa = forms.CharField(max_length=100, label="Pais de la empresa",
-                                    widget=forms.Select(choices=paises))
+    # paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
+    # paisEmpresa = forms.CharField(max_length=100, label="Pais de la empresa",
+    #                                 widget=forms.Select(choices=paises))
+
     sectoresMenu = [
         ("Público", "Público"),
         ("Privado", "Privado"),
@@ -66,7 +67,21 @@ class EmpresaForm(ModelForm):
     # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Empresa
-        fields = ['razonSocial', 'rfc', 'giro', 'paisEmpresa', 'sectorEmpresa']
+        fields = ['razonSocial', 'rfc', 'giro', 'country', 'city','sectorEmpresa']
+
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['city'].queryset = City.objects.none()
+
+        if 'country' in self.data:
+            try:
+                country_id = int(self.data.get('country'))
+                self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
+            except (ValueError, TypeError):
+                pass
+        elif self.instance.pk:
+            self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
 
 
 # Formulario de añadir / modificar contacto

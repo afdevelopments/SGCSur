@@ -5,6 +5,8 @@ from .models import *
 
 # Register your models here.
 
+admin.site.register(Country)
+admin.site.register(City)
 admin.site.register(Empresa)
 admin.site.register(Contacto)
 admin.site.register(Carreras)

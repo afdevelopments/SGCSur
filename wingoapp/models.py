@@ -19,6 +19,22 @@ class Task(models.Model):
         return self.title
 
 
+class Country(models.Model):
+    # idPais = models.AutoField(primary_key=True, verbose_name='ID del pais')
+    name = models.CharField(max_length=100)
+
+
+    def __str__(self):
+        return self.name
+
+class City(models.Model):
+    # idEstado = models.AutoField(primary_key=True, verbose_name='ID del estado')
+    name = models.CharField(max_length=100)
+    country = models.ForeignKey(Country, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.name
+
 class Empresa(models.Model):
     idEmpresa = models.AutoField(primary_key=True, verbose_name='ID del contacto')
     razonSocial = models.CharField(verbose_name='Razón social de la empresa', max_length=200,
@@ -36,10 +52,18 @@ class Empresa(models.Model):
                            )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
-    paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
-    paisEmpresa = models.CharField(choices=paises, default="Mexico", max_length=50,
-                                     help_text="Ingrese el pais", verbose_name='Pais de la empresa'
-                                     )
+    
+    country = models.ForeignKey(Country, on_delete=models.SET_NULL,
+                                  help_text="Seleccione el país", verbose_name='Pais de la empresa', null=True
+                                  )
+    city = models.ForeignKey(City, on_delete=models.SET_NULL,
+                                  help_text="Seleccione el estado", verbose_name='Estado de la empresa', null=True
+                                  )
+
+    # paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
+    # paisEmpresa = models.CharField(choices=paises, default="Mexico", max_length=50,
+    #                                  help_text="Ingrese el pais", verbose_name='Pais de la empresa'
+    #                                  )
     sectores = [
         ("Público", "Público"),
         ("Privado", "Privado"),

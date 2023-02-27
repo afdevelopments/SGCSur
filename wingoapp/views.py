@@ -1692,6 +1692,13 @@ def empresas_listas(request):
     return render(request, 'empresas/empresas/empresas.html', context)
 
 
+# Conecta los países y estados en el formulario de empresas.
+def load_cities(request):
+    country_id = request.GET.get('country')
+    cities = City.objects.filter(country_id=country_id).order_by('name')
+    return render(request, 'hr/city_dropdown_list_options.html', {'cities': cities})
+
+
 @login_required(login_url="/login")
 def empresas_agregar(request):
     if request.POST:
@@ -1715,12 +1722,14 @@ def empresas_modificar(request, pk):
         nomEmpresa = request.POST['razonSocial']
         rfcEmpresa = request.POST['rfc']
         giroEmpresa = request.POST['giro']
-        paisEmpresa = request.POST['paisEmpresa']
+        pais = request.POST['pais']
+        estado = request.POST['estado']
         sector = request.POST['sectorEmpresa']
         empresa.razonSocial = nomEmpresa
         empresa.rfc = rfcEmpresa
         empresa.giro = giroEmpresa
-        empresa.paisEmpresa = paisEmpresa
+        empresa.pais = pais
+        empresa.estado = estado
         empresa.sectorEmpresa = sector
         empresa.save()
         return redirect('empresas')
