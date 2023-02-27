@@ -62,6 +62,12 @@ urlpatterns = [
     path('contactos_eliminar/<int:pk>', views.contactos_eliminar, name='contactos_eliminar'),
     path('contactos_ver/<int:pk>', views.contactos_ver, name='contactos_ver'),
 
+    # convenios
+    path('convenios', views.convenios_listas, name='convenios'),
+    path('convenios_agregar', views.convenios_agregar, name='convenios_agregar'),
+    path('convenios_modificar/<int:pk>', views.convenios_modificar, name='convenios_modificar'),
+    path('convenios_eliminar/<int:pk>', views.convenios_eliminar, name='convenios_eliminar'),
+ #   path('convenios_ver/<int:pk>', views.convenios_ver, name='convenios_ver'),
 
 
 ]

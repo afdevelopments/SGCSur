@@ -1,0 +1,53 @@
+{% load static %}
+{% load sass_tags %}
+{% load crispy_forms_tags %}
+<div class="card">
+  <div class="card-header pb-0">
+    <h5>Convenios</h5><span>Lista de los convenios existentes en el sistema.</span>
+  </div>
+    <div class="card-body">
+         {% if lista_convenios %}
+          <div class="table-primary">
+            <table class="display" id="basic-2">
+              <thead>
+                <tr>
+                    <th>No. de convenio</th>
+                    <th>Empresa</th>
+                    <th>Promotor</th>
+                    <th>Vigente desde</th>
+                    <th>Vigente hasta</th>
+                </tr>
+              </thead>
+              <tbody>
+              {%  for convenio in lista_convenios %}
+              <tr>
+                  <td>{{ convenio.numConvenio }}</td>
+                  <td>{{ convenio.idEmpresa.razonSocial }}</td>
+                  <td>{{ convenio.idCarrera.nombreCarrera }}</td>
+                  <td>{{ convenio.inicioVigencia }}</td>
+                  <td>{{ convenio.finVigencia }}</td>
+                  <td><button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
+                              aria-haspopup="true" aria-expanded="false">
+                          Acciones
+                      </button>
+                  <div class="dropdown-menu" style="">
+                      <h6 class="dropdown-header">Seleccione la opción</h6>
+                      <a class="dropdown-item" href="">Ver detalles</a>
+                      <a class="dropdown-item" href="{% url 'convenios_modificar' convenio.numConvenio %}">Modificar</a>
+                        <!-- Modal for deleting a django model -->
+                      <a class="dropdown-item" href="{% url 'convenios_eliminar' convenio.numConvenio %}">Eliminar</a>
+                  </div>
+                  </td>
+              </tr>
+                {% endfor %}
+            </table>
+          </div>
+        {% else %}
+        <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
+              <p><b> ¡Sin registros! </b>No existen registros de convenios.</p>
+              <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span
+                  class="bg-warning" aria-hidden="true">dismiss</span></button>
+            </div>
+         {% endif %}
+        </div>
+</div>

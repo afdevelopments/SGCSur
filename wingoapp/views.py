@@ -1752,8 +1752,9 @@ def empresas_ver(request, pk):
     }
     return render(request, 'empresas/empresas_ver/empresas_ver.html', context)
 
-#Contactos.
-#Contactos listas.
+
+# Contactos.
+# Contactos listas.
 @login_required(login_url="/login")
 def contactos_listas(request):
     lista_contactos = Contacto.objects.all()
@@ -1763,7 +1764,8 @@ def contactos_listas(request):
     }
     return render(request, 'contactos/contactos/contactos.html', context)
 
-#Contactos agregar.
+
+# Contactos agregar.
 @login_required(login_url="/login")
 def contactos_agregar(request):
     if request.POST:
@@ -1777,7 +1779,8 @@ def contactos_agregar(request):
     }
     return render(request, 'contactos/contactos_agregar/contactos_agregar.html', context)
 
-#Contactos modificar.
+
+# Contactos modificar.
 @login_required(login_url="/login")
 def contactos_modificar(request, pk):
     contacto = get_object_or_404(Contacto, idContacto=pk)
@@ -1803,7 +1806,8 @@ def contactos_modificar(request, pk):
     }
     return render(request, 'contactos/contactos_modificar/contactos_modificar.html', context)
 
-#Contactos eliminar.
+
+# Contactos eliminar.
 @login_required(login_url="/login")
 def contactos_eliminar(request, pk):
     contacto = get_object_or_404(Contacto, idContacto=pk)
@@ -1816,7 +1820,8 @@ def contactos_eliminar(request, pk):
     }
     return render(request, 'contactos/contactos_eliminar/contactos_eliminar.html', context)
 
-#Contactos ver.
+
+# Contactos ver.
 @login_required(login_url="/login")
 def contactos_ver(request, pk):
     contacto = get_object_or_404(Contacto, idContacto=pk)
@@ -1825,3 +1830,72 @@ def contactos_ver(request, pk):
         "contacto": contacto,
     }
     return render(request, 'contactos/contactos_ver/contactos_ver.html', context)
+
+
+# Convenios.
+# Convenios listas
+@login_required(login_url="/login")
+def convenios_listas(request):
+    lista_convenios = Convenio.objects.all()
+    context = {
+        "breadcrumb": {"parent": "Convenios", "child": "Ver"},
+        "lista_convenios": lista_convenios
+    }
+    return render(request, 'convenios/convenios/convenios.html', context)
+
+
+# Convenios agregar
+@login_required(login_url="/login")
+def convenios_agregar(request):
+    if request.POST:
+        form = ConvenioForm(request.POST)
+        if form.is_valid():
+            form.save()
+        return redirect('convenios')
+    context = {
+        "breadcrumb": {"parent": "Convenios", "child": "Añadir"},
+        'form': ConvenioForm
+    }
+    return render(request, 'convenios/convenios_agregar/convenios_agregar.html', context)
+
+
+# Convenios modificar
+@login_required(login_url="/login")
+def convenios_modificar(request, pk):
+    convenio = get_object_or_404(Convenio, numConvenio=pk)
+    form = ConvenioForm(initial={"idCarrera": convenio.idCarrera.nombreCarrera,
+                                 "inicioVigencia": convenio.inicioVigencia,
+                                 "idEmpresa": convenio.idEmpresa.razonSocial,
+                                 "finVigencia": convenio.finVigencia})
+    if request.POST:
+        carrera_cadena = request.POST['idCarrera']
+        idCarrera = Carreras.objects.get(idCarrera=carrera_cadena)
+        inicioVigencia = request.POST['inicioVigencia']
+        finVigencia = request.POST['finVigencia']
+        empresa_cadena = request.POST['idEmpresa']
+        idEmpresa = Empresa.objects.get(idEmpresa=empresa_cadena)
+        convenio.idCarrera = idCarrera
+        convenio.inicioVigencia = inicioVigencia
+        convenio.finVigencia = finVigencia
+        convenio.idEmpresa = idEmpresa
+        convenio.save()
+        return redirect('convenios')
+    context = {
+        "breadcrumb": {"parent": "Convenios", "child": "Modificar"},
+        'form': form,
+        "Convenio": convenio,
+    }
+    return render(request, 'convenios/convenios_modificar/convenios_modificar.html', context)
+
+# Convenios Eliminar
+@login_required(login_url="/login")
+def convenios_eliminar(request, pk):
+    convenio = get_object_or_404(Convenio, numConvenio=pk)
+    if request.POST:
+        convenio.delete()
+        return redirect('convenios')
+    context = {
+        "convenio": convenio,
+        "breadcrumb": {"parent": "Convenio", "child": "Eliminar"}
+    }
+    return render(request, 'convenios/convenios_eliminar/convenios_eliminar.html', context)

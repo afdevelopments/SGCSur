@@ -1,6 +1,6 @@
 from dataclasses import field
 from django import forms
-from django.forms import ModelForm
+from django.forms import ModelForm, DateInput
 
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
@@ -16,7 +16,6 @@ class TaskForm(forms.ModelForm):
 
 # Para cambiar el label del usuario y contraseña
 class CustomAuthenticationForm(AuthenticationForm):
-
     username = UsernameField(
         label='Usuario',
         widget=forms.TextInput()
@@ -72,3 +71,19 @@ class ContactoForm(ModelForm):
     class Meta:
         model = Contacto
         fields = ['nombre', 'numTelefono', 'idEmpresa', 'email']
+
+
+class ConvenioForm(ModelForm):
+    idCarrera = forms.ModelChoiceField(queryset=Carreras.objects.all(), label="Carrera")
+    inicioVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente desde")
+    finVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente hasta")
+    idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
+
+    # Class Meta para definir el modelo y los campos que se van a mostrar
+    class Meta:
+        model = Convenio
+        fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa']
+        widgets = {
+            'inicioVigencia': DateInput(),
+            'finVigencia': DateInput(),
+        }

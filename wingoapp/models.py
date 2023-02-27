@@ -92,8 +92,8 @@ class Convenio(models.Model):
     idCarrera = models.ForeignKey(Carreras, on_delete=models.CASCADE, help_text="Seleccione la carrera",
                                   verbose_name='Carrera'
                                   )
-    inicioVigencia = models.DateTimeField(auto_now=True)
-    finVigencia = models.DateTimeField(auto_now=True)
+    inicioVigencia = models.DateField(verbose_name='Vigente desde')
+    finVigencia = models.DateField(verbose_name='Vigente hasta')
     idEmpresa = models.ForeignKey(Empresa, on_delete=models.CASCADE,
                                   help_text="Seleccione la empresa", verbose_name='Empresa'
                                   )
