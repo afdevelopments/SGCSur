@@ -4,7 +4,12 @@ from django.forms import ModelForm
 
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
+import pycountry
+import gettext
 
+español = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['es'])
+español.install()
+_ = español.gettext
 
 class TaskForm(forms.ModelForm):
     title = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'placeholder': 'Enter new task here. . .'}))
@@ -46,6 +51,9 @@ class EmpresaForm(ModelForm):
     razonSocial = forms.CharField(max_length=200, label="Nombre de la empresa")
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
+    paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
+    paisEmpresa = forms.CharField(max_length=100, label="Pais de la empresa",
+                                    widget=forms.Select(choices=paises))
     sectoresMenu = [
         ("Público", "Público"),
         ("Privado", "Privado"),
@@ -58,7 +66,7 @@ class EmpresaForm(ModelForm):
     # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Empresa
-        fields = ['razonSocial', 'rfc', 'giro', 'sectorEmpresa']
+        fields = ['razonSocial', 'rfc', 'giro', 'paisEmpresa', 'sectorEmpresa']
 
 
 # Formulario de añadir / modificar contacto

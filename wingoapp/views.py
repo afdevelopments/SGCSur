@@ -1715,10 +1715,12 @@ def empresas_modificar(request, pk):
         nomEmpresa = request.POST['razonSocial']
         rfcEmpresa = request.POST['rfc']
         giroEmpresa = request.POST['giro']
+        paisEmpresa = request.POST['paisEmpresa']
         sector = request.POST['sectorEmpresa']
         empresa.razonSocial = nomEmpresa
         empresa.rfc = rfcEmpresa
         empresa.giro = giroEmpresa
+        empresa.paisEmpresa = paisEmpresa
         empresa.sectorEmpresa = sector
         empresa.save()
         return redirect('empresas')

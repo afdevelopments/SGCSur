@@ -1,10 +1,14 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.safestring import mark_safe
-
+import pycountry
+import gettext
 
 # Create your models here.
 
+español = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['es'])
+español.install()
+_ = español.gettext
 
 class Task(models.Model):
     title = models.CharField(max_length=200, null=False)
@@ -32,6 +36,10 @@ class Empresa(models.Model):
                            )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
+    paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
+    paisEmpresa = models.CharField(choices=paises, default="Mexico", max_length=50,
+                                     help_text="Ingrese el pais", verbose_name='Pais de la empresa'
+                                     )
     sectores = [
         ("Público", "Público"),
         ("Privado", "Privado"),
