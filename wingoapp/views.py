@@ -1887,6 +1887,7 @@ def convenios_modificar(request, pk):
     }
     return render(request, 'convenios/convenios_modificar/convenios_modificar.html', context)
 
+
 # Convenios Eliminar
 @login_required(login_url="/login")
 def convenios_eliminar(request, pk):
@@ -1899,3 +1900,14 @@ def convenios_eliminar(request, pk):
         "breadcrumb": {"parent": "Convenio", "child": "Eliminar"}
     }
     return render(request, 'convenios/convenios_eliminar/convenios_eliminar.html', context)
+
+
+# Convenios Ver
+@login_required(login_url="/login")
+def convenios_ver(request, pk):
+    convenio = get_object_or_404(Convenio, numConvenio=pk)
+    context = {
+        "breadcrumb": {"parent": "Contactos", "child": "Ver detalles"},
+        "convenio": convenio,
+    }
+    return render(request, 'convenios/convenios_ver/convenios_ver.html', context)

@@ -3,15 +3,18 @@
 {% load crispy_forms_tags %}
 <div class="card">
     <div class="card-header pb-0">
-        <h4>Detalles de contacto</h4><span>Detalles del contacto {{ contactos.nombre.lower }}</span>
+        <h4>Detalles del convenio</h4>
+        <span>Detalles del convenio número {{ convenio.numConvenio }}, celebrado con
+            {{ convenio.idEmpresa.razonSocial }}</span>
     </div>
     <div class="card-body">
-        <h5>Id del contacto: </h5> {{ contacto.idContacto }}
-        <h5>Nombre del contacto:</h5> {{ contacto.nombre }}
-        <h5>Número de teléfono del contacto:</h5> {{ contacto.numTelefono }}
-        <h5>Empresa relacionada al contacto:</h5> {{ contacto.idEmpresa }}
+        <h5>Id del convenio: </h5> {{ convenio.numConvenio }}
+        <h5>Empresa:</h5> {{ convenio.idEmpresa.razonSocial }}
+        <h5>Carrera:</h5> {{ convenio.idCarrera.nombreCarrera }}
+        <h5>Vigente desde:</h5> {{ convenio.inicioVigencia }}
+        <h5>Vigente hasta:</h5> {{ convenio.finVigencia }}
     </div>
     <div class="card-body">
-        <a href="{% url 'contactos' %}" class="btn crispy_forms btn-primary">Regresar</a>
+        <a href="{% url 'convenios' %}" class="btn crispy_forms btn-primary">Regresar</a>
     </div>
 </div>
