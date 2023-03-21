@@ -11,6 +11,7 @@ español = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['es'
 español.install()
 _ = español.gettext
 
+
 class TaskForm(forms.ModelForm):
     title = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'placeholder': 'Enter new task here. . .'}))
 
@@ -21,7 +22,6 @@ class TaskForm(forms.ModelForm):
 
 # Para cambiar el label del usuario y contraseña
 class CustomAuthenticationForm(AuthenticationForm):
-
     username = UsernameField(
         label='Usuario',
         widget=forms.TextInput()
@@ -51,9 +51,10 @@ class EmpresaForm(ModelForm):
     razonSocial = forms.CharField(max_length=200, label="Nombre de la empresa")
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
-    # paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
-    # paisEmpresa = forms.CharField(max_length=100, label="Pais de la empresa",
-    #                                 widget=forms.Select(choices=paises))
+    pais = forms.CharField(label="Pais de la empresa", widget=forms.widgets.Select(attrs={
+        'onchange': "print_state('state',this.selectedIndex);", 'id': 'country', 'name': 'country'
+    }))
+    estado = forms.CharField(label="Estado de la empresa", widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
 
     sectoresMenu = [
         ("Público", "Público"),
@@ -63,25 +64,10 @@ class EmpresaForm(ModelForm):
     ]
     sectorEmpresa = forms.CharField(max_length=100, label="Sector de la empresa",
                                     widget=forms.Select(choices=sectoresMenu))
-
-    # Class Meta para definir el modelo y los campos que se van a mostrar
+# Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Empresa
-        fields = ['razonSocial', 'rfc', 'giro', 'country', 'city','sectorEmpresa']
-
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['city'].queryset = City.objects.none()
-
-        if 'country' in self.data:
-            try:
-                country_id = int(self.data.get('country'))
-                self.fields['city'].queryset = City.objects.filter(country_id=country_id).order_by('name')
-            except (ValueError, TypeError):
-                pass
-        elif self.instance.pk:
-            self.fields['city'].queryset = self.instance.country.city_set.order_by('name')
+        fields = ['razonSocial', 'rfc', 'giro', 'pais', 'estado', 'sectorEmpresa']
 
 
 # Formulario de añadir / modificar contacto

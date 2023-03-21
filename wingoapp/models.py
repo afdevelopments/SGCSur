@@ -10,6 +10,7 @@ español = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['es'
 español.install()
 _ = español.gettext
 
+
 class Task(models.Model):
     title = models.CharField(max_length=200, null=False)
     complete = models.BooleanField(default=False)
@@ -23,9 +24,9 @@ class Country(models.Model):
     # idPais = models.AutoField(primary_key=True, verbose_name='ID del pais')
     name = models.CharField(max_length=100)
 
-
     def __str__(self):
         return self.name
+
 
 class City(models.Model):
     # idEstado = models.AutoField(primary_key=True, verbose_name='ID del estado')
@@ -34,6 +35,7 @@ class City(models.Model):
 
     def __str__(self):
         return self.name
+
 
 class Empresa(models.Model):
     idEmpresa = models.AutoField(primary_key=True, verbose_name='ID del contacto')
@@ -52,18 +54,10 @@ class Empresa(models.Model):
                            )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
-    
-    country = models.ForeignKey(Country, on_delete=models.SET_NULL,
-                                  help_text="Seleccione el país", verbose_name='Pais de la empresa', null=True
-                                  )
-    city = models.ForeignKey(City, on_delete=models.SET_NULL,
-                                  help_text="Seleccione el estado", verbose_name='Estado de la empresa', null=True
-                                  )
-
-    # paises = [(_(pais.name), _(pais.name)) for pais in list(pycountry.countries)]
-    # paisEmpresa = models.CharField(choices=paises, default="Mexico", max_length=50,
-    #                                  help_text="Ingrese el pais", verbose_name='Pais de la empresa'
-    #                                  )
+    pais = models.CharField(verbose_name='Pais de la empresa', max_length=50, help_text="Seleccione el pais",
+                            null=False)
+    estado = models.CharField(verbose_name='Estado de la empresa', max_length=50, help_text="Seleccione el estado",
+                              null=False)
     sectores = [
         ("Público", "Público"),
         ("Privado", "Privado"),
@@ -73,7 +67,6 @@ class Empresa(models.Model):
     sectorEmpresa = models.CharField(choices=sectores, default="Privado", max_length=20,
                                      help_text="Ingrese el sector", verbose_name='Sector de la empresa'
                                      )
-
     def __str__(self):
         return self.razonSocial
 
