@@ -43,7 +43,7 @@ class CarreraForm(ModelForm):
 # Formulario de añadir / modificar empresa
 class EmpresaForm(ModelForm):
     razonSocial = forms.CharField(max_length=200, label="Razón social de la empresa (Nombre legal)")
-    nombre = forms.CharField(max_length=200, label="Nombre conocido de la empresa")
+    nombre = forms.CharField(max_length=200, label="Nombre conocido de la empresa", required=False)
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
     pais = forms.CharField(label="Pais de la empresa", widget=forms.widgets.Select(attrs={
@@ -54,7 +54,7 @@ class EmpresaForm(ModelForm):
     colonia = forms.CharField(max_length=200, label="Colonia donde está ubicada la empresa")
     calle = forms.CharField(max_length=200, label="Calle donde está ubicada la empresa")
     numero = forms.CharField(max_length=10, label="Número del local de la empresa")
-    numeroInterior = forms.CharField(max_length=10, label="Número interior del local de la empresa")
+    numeroInterior = forms.CharField(max_length=10, label="Número interior del local de la empresa", required=False)
     cp = forms.CharField(max_length=5, label="Código postal de la empresa")
 
     sectoresMenu = [
@@ -89,11 +89,12 @@ class ConvenioForm(ModelForm):
     inicioVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente desde")
     finVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente hasta")
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
+    observaciones = forms.CharField( widget=forms.Textarea, label="Observaciones", required=False)
 
     # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Convenio
-        fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa']
+        fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa', 'observaciones']
         widgets = {
             'inicioVigencia': DateInput(),
             'finVigencia': DateInput(),

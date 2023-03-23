@@ -1,6 +1,7 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.safestring import mark_safe
+from django.utils import timezone
 # Create your models here.
 
 
@@ -18,7 +19,7 @@ class Empresa(models.Model):
     razonSocial = models.CharField(verbose_name='Razón social de la empresa', max_length=200,
                                    help_text="Ingrese la razón social de la empresa")
     nombre = models.CharField(verbose_name='Nombre conocido de la empresa', max_length=200,
-                                   help_text="Ingrese el nombre conocido de la empresa")
+                                   help_text="Ingrese el nombre conocido de la empresa", null=True, blank=True, default='None')
     rfc = models.CharField(max_length=13, verbose_name='RFC',
                            help_text=mark_safe(
                                '12-13 caracteres <a href="https://www.sat.gob.mx/consultas/44083/consulta-tu'
@@ -45,7 +46,7 @@ class Empresa(models.Model):
     numero = models.CharField(verbose_name='Número de local de la empresa', max_length=10,
                                    help_text="Ingrese el número del local donde está ubicada la empresa", null=False)
     numeroInterior = models.CharField(verbose_name='Número interior de la empresa', max_length=10,
-                                   help_text="Ingrese el número interior del local donde está ubicada la empresa", null=False)
+                                   help_text="Ingrese el número interior del local donde está ubicada la empresa", null=True, blank=True, default='None')
     cp = models.CharField(max_length=5, verbose_name='Código postal de la empresa',
                                    help_text="Ingrese el código postal de la empresa", null=False)
     sectores = [
@@ -112,6 +113,10 @@ class Convenio(models.Model):
     idEmpresa = models.ForeignKey(Empresa, on_delete=models.CASCADE,
                                   help_text="Seleccione la empresa", verbose_name='Empresa'
                                   )
+    observaciones = models.TextField(verbose_name='Observaciones del convenio', null=True, blank=True)
+
+    def activo(self):
+        return self.inicioVigencia <= timezone.now().date() <= self.finVigencia
 
     def __str__(self):
         return self.numConvenio

@@ -1887,7 +1887,8 @@ def convenios_modificar(request, pk):
     form = ConvenioForm(initial={"idCarrera": convenio.idCarrera.nombreCarrera,
                                  "inicioVigencia": convenio.inicioVigencia,
                                  "idEmpresa": convenio.idEmpresa.razonSocial,
-                                 "finVigencia": convenio.finVigencia})
+                                 "finVigencia": convenio.finVigencia,
+                                 "observaciones": convenio.observaciones})
     if request.POST:
         carrera_cadena = request.POST['idCarrera']
         idCarrera = Carreras.objects.get(idCarrera=carrera_cadena)
@@ -1895,10 +1896,12 @@ def convenios_modificar(request, pk):
         finVigencia = request.POST['finVigencia']
         empresa_cadena = request.POST['idEmpresa']
         idEmpresa = Empresa.objects.get(idEmpresa=empresa_cadena)
+        observaciones = request.POST['observaciones']
         convenio.idCarrera = idCarrera
         convenio.inicioVigencia = inicioVigencia
         convenio.finVigencia = finVigencia
         convenio.idEmpresa = idEmpresa
+        convenio.observaciones = observaciones
         convenio.save()
         return redirect('convenios')
     context = {

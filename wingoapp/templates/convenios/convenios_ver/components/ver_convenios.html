@@ -13,6 +13,7 @@
         <h5>Carrera:</h5> {{ convenio.idCarrera.nombreCarrera }}
         <h5>Vigente desde:</h5> {{ convenio.inicioVigencia }}
         <h5>Vigente hasta:</h5> {{ convenio.finVigencia }}
+        <h5>Estado:</h5> {{ convenio.activo }}
     </div>
     <div class="card-body">
         <a href="{% url 'convenios' %}" class="btn crispy_forms btn-primary">Regresar</a>

@@ -16,6 +16,8 @@
                     <th>Promotor</th>
                     <th>Vigente desde</th>
                     <th>Vigente hasta</th>
+                    <th>Estado del convenio</th>
+                    <th>Observaciones</th>
                     <th>Acciones</th>
                 </tr>
               </thead>
@@ -27,6 +29,12 @@
                   <td>{{ convenio.idCarrera.nombreCarrera }}</td>
                   <td>{{ convenio.inicioVigencia }}</td>
                   <td>{{ convenio.finVigencia }}</td>
+                  {% if convenio.activo %}
+                    <td style="width: 5%; text-align: center;"><img src="{%  static 'assets/images/estado_convenio/activo.png' %}" alt="Convenio activo" style="width: 50%;"></td>
+                  {% else %}
+                    <td style="width: 5%; text-align: center;"><img src="{% static 'assets/images/estado_convenio/expirado.png' %}" alt="Convenio expirado" style="width: 50%;"></td>
+                  {% endif %}
+                  <td>{{ convenio.observaciones }}</td>
                   <td><button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                               aria-haspopup="true" aria-expanded="false">
                           Acciones
@@ -44,7 +52,7 @@
             </table>
           </div>
         {% else %}
-        <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
+            <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
               <p><b> ¡Sin registros! </b>No existen registros de convenios.</p>
               <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span
                   class="bg-warning" aria-hidden="true">dismiss</span></button>
