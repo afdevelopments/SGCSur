@@ -45,7 +45,6 @@ urlpatterns = [
     path('carreras', views.carreras_listas, name='carreras'),
     path('carreras_eliminar/<int:pk>', views.carreras_eliminar, name='carreras_eliminar'),
     path('carreras_agregar', views.carreras_agregar, name='carreras_agregar'),
-    path('ajax/load-cities/', views.load_cities, name='ajax_load_cities'),
     path('carreras_modificar/<int:pk>', views.carreras_modificar, name='carreras_modificar'),
     path('carreras_ver/<int:pk>', views.carreras_ver, name='carreras_ver'),
 
