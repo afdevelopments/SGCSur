@@ -1,15 +1,4 @@
-{% load static %}
-{% load sass_tags %}
-{% load crispy_forms_tags %}
-<div class="card">
-  <div class="card-header pb-0">
-    <h5>Añadir</h5><span>Para agregar una empresa, por favor rellene el siguiente formulario.</span>
-  </div>
-    <form class="form theme-form" method="post" action="{% url 'empresas_agregar' %}" enctype="multipart/form-data">
-        <div class="card-body">
-            {% csrf_token %}
-            {% crispy form %}
-            <script type= "text/javascript">
+<script type= "text/javascript">
 
               var country_arr = new Array("Afganistán", "Albania", "Alemania", "Angola", "Anguila", "Antigua y Barbuda", "Antillas Holandesas", "Antártida", "Arabia Saudita", "Argelia", "Argentina", "Armenia", "Arrecife Johnston", "Aruba", "Australia", "Austria", "Azerbaiyán", "Bahamas", "Bahréin", "Bangladesh", "Barbados", "Belice", "Benin", "Bermudas", "Bhután", "Bielorrusia", "Birmania", "Bolivia", "Bosnia y Herzegovina", "Botswana", "Brasil", "Brunei", "Bulgaria", "Burkina Faso", "Burundi", "Bélgica", "Cabo Verde", "Camboya", "Camerún", "Canadá", "Catar", "Chad", "Chile", "China", "Chipre", "Cisjordania", "Ciudad del Vaticano", "Colombia", "Comoras", "Corea del Norte", "Corea del Sur", "Costa Rica", "Costa de Marfil", "Croacia", "Cuba", "Dinamarca", "Djibouti", "Dominica", "Ecuador", "Egipto", "El Salvador", "Emiratos Árabes Unidos", "Eritrea", "Escocia", "Eslovaquia", "Eslovenia", "España", "Estados Unidos", "Estonia", "Etiopía", "Fiji", "Filipinas", "Finlandia", "Francia", "Franja de Gaza", "Gabón", "Gales", "Gambia", "Georgia", "Ghana", "Gibraltar", "Granada", "Grecia", "Groenlandia", "Guadalupe", "Guam", "Guatemala", "Guayana Francesa", "Guernsey", "Guinea", "Guinea Ecuatorial", "Guinea-Bissau", "Guyana", "Haití", "Honduras", "Hong Kong", "Hungría", "India", "Indonesia", "Irak", "Irlanda", "Irlanda del Norte", "Irán", "Isla Ashmore y Cartier", "Isla Clipperton", "Isla Europa", "Isla Heard e Islas McDonald", "Isla Howland", "Isla Jan Mayen", "Isla Jarvis", "Isla Juan de Nova", "Isla Norfolk", "Isla de Man", "Isla de Navidad", "Islandia", "Islas Caimán", "Islas Cocos (Keeling)", "Islas Cook", "Islas Faroe", "Islas Georgias del Sur y Sandwich del Sur", "Islas Gloriosas", "Islas Malvinas", "Islas Marianas del Norte", "Islas Marshall", "Islas Midway", "Islas Pitcairn", "Islas Salomón", "Islas Spratly", "Islas Vírgenes", "Islas Vírgenes Británicas", "Israel", "Italia", "Jamaica", "Japón", "Jersey", "Jordania", "Kazajistán", "Kenia", "Kirguistán", "Kiribati", "Kuwait", "Laos", "Lesoto", "Letonia", "Liberia", "Libia", "Liechtenstein", "Lituania", "Luxemburgo", "Líbano", "Macao", "Macedonia del Norte", "Madagascar", "Malasia", "Malaui", "Maldivas", "Malta", "Malí", "Marruecos", "Martinica", "Mauricio", "Mauritania", "Mayotte", "Micronesia", "Moldavia", "Mongolia", "Montserrat", "Mozambique", "México", "Mónaco", "Namibia", "Nauru", "Nepal", "Nicaragua", "Nigeria", "Niue", "Noruega", "Nueva Caledonia", "Nueva Zelanda", "Níger", "Omán", "Pakistán", "Palau", "Panamá", "Papúa Nueva Guinea", "Paraguay", "Países Bajos", "Perú", "Polinesia Francesa", "Polonia", "Portugal", "Puerto Rico", "Reino Unido", "República Centroafricana", "República Checa", "República Democrática del Congo", "República Dominicana", "República del Congo", "Reunión", "Ruanda", "Rumania", "Rusia", "Samoa", "Samoa Americana", "San Cristóbal y Nieves", "San Marino", "San Pedro y Miquelón", "San Vicente y las Granadinas", "Santa Elena", "Santa Lucía", "Santo Tomé y Príncipe", "Senegal", "Seychelles", "Sierra Leona", "Singapur", "Siria", "Somalia", "Sri Lanka", "Suazilandia", "Sudáfrica", "Sudán", "Suecia", "Suiza", "Surinam", "Svalbard", "Sáhara Occidental", "Tailandia", "Taiwán", "Tanzania", "Tayikistán", "Tierras Australes y Antárticas Francesas", "Tobago", "Togo", "Tokelau", "Tonga", "Trinidad", "Turkmenistán", "Turquía", "Tuvalu", "Túnez", "Ucrania", "Uganda", "Uruguay", "Uzbekistán", "Vanuatu", "Venezuela", "Vietnam", "Wallis y Futuna", "Yemen", "Yugoslavia", "Zambia", "Zimbabue",);
 
@@ -291,9 +280,3 @@
                 }
               }
             </script>
-
-            <script language="javascript">print_country("country");</script>
-            <button class="btn crispy_forms btn-primary" type="submit">Añadir</button>
-        </div>
-    </form>
-</div>

@@ -42,9 +42,21 @@ class CarreraForm(ModelForm):
 
 # Formulario de añadir / modificar empresa
 class EmpresaForm(ModelForm):
-    razonSocial = forms.CharField(max_length=200, label="Nombre de la empresa")
+    razonSocial = forms.CharField(max_length=200, label="Razón social de la empresa (Nombre legal)")
+    nombre = forms.CharField(max_length=200, label="Nombre conocido de la empresa")
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
+    pais = forms.CharField(label="Pais de la empresa", widget=forms.widgets.Select(attrs={
+        'onchange': "print_state('state',this.selectedIndex);", 'id': 'country', 'name': 'country'
+    }))
+    estado = forms.CharField(label="Estado de la empresa", widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
+    ciudad = forms.CharField(max_length=200, label="Ciudad donde está ubicada la empresa")
+    colonia = forms.CharField(max_length=200, label="Colonia donde está ubicada la empresa")
+    calle = forms.CharField(max_length=200, label="Calle donde está ubicada la empresa")
+    numero = forms.CharField(max_length=10, label="Número del local de la empresa")
+    numeroInterior = forms.CharField(max_length=10, label="Número interior del local de la empresa")
+    cp = forms.CharField(max_length=5, label="Código postal de la empresa")
+
     sectoresMenu = [
         ("Público", "Público"),
         ("Privado", "Privado"),
@@ -53,11 +65,10 @@ class EmpresaForm(ModelForm):
     ]
     sectorEmpresa = forms.CharField(max_length=100, label="Sector de la empresa",
                                     widget=forms.Select(choices=sectoresMenu))
-
-    # Class Meta para definir el modelo y los campos que se van a mostrar
+# Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Empresa
-        fields = ['razonSocial', 'rfc', 'giro', 'sectorEmpresa']
+        fields = ['razonSocial', 'nombre','rfc', 'giro', 'pais', 'estado', 'ciudad', 'colonia', 'calle', 'numero', 'numeroInterior', 'cp', 'sectorEmpresa']
 
 
 # Formulario de añadir / modificar contacto

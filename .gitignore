@@ -1,3 +1,4 @@
 /sistemita-env/
 /.idea/
+/.vscode/
 db.sqlite3
