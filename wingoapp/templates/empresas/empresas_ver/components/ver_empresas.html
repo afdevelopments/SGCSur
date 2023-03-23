@@ -7,10 +7,19 @@
     </div>
     <div class="card-body">
         <h5>Id de la empresa: </h5> {{ empresa.idEmpresa }}
-        <h5>Razón social</h5> {{ empresa.razonSocial }}
-        <h5>RFC</h5> {{ empresa.rfc }}
-        <h5>Giro</h5> {{ empresa.giro }}
-        <h5>Sector</h5> {{ empresa.sectorEmpresa }}
+        <h5>Razón social:</h5> {{ empresa.razonSocial }}
+        <h5>Nombre conocido:</h5> {{ empresa.nombre }}
+        <h5>RFC:</h5> {{ empresa.rfc }}
+        <h5>Giro:</h5> {{ empresa.giro }}
+        <h5>Pais de la empresa:</h5> {{ empresa.pais }}
+        <h5>Estado de la empresa:</h5> {{ empresa.estado }}
+        <h5>Ciudad de la empresa:</h5> {{ empresa.ciudad }}
+        <h5>Colonia:</h5> {{ empresa.colonia }}
+        <h5>Calle:</h5> {{ empresa.calle }}
+        <h5>Número:</h5> {{ empresa.numero }}
+        <h5>Número interior:</h5> {{ empresa.numeroInterior }}
+        <h5>Código postal:</h5> {{ empresa.cp }}
+        <h5>Sector:</h5> {{ empresa.sectorEmpresa }}
     </div>
     <div class="card-body">
         <a href="{% url 'empresas' %}" class="btn crispy_forms btn-primary">Regresar</a>

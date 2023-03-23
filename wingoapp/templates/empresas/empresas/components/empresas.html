@@ -12,11 +12,18 @@
               <thead>
                 <tr role="row">
                   <th>ID Empresa</th>
+                    <th>Razón social de la Empresa</th>
                     <th>Nombre de la Empresa</th>
                     <th>RFC de la Empresa</th>
                     <th>Giro de la Empresa</th>
                     <th>Pais de la Empresa</th>
                     <th>Estado de la Empresa</th>
+                    <th>Ciudad de la Empresa</th>
+                    <th>Colonia de la Empresa</th>
+                    <th>Calle de la Empresa</th>
+                    <th>Número del local de la Empresa</th>
+                    <th>Número interior del local de la Empresa</th>
+                    <th>Código postal de la Empresa</th>
                     <th>Sector de la Empresa</th>
                     <th>Acciones</th>
                 </tr>
@@ -26,10 +33,17 @@
               <tr>
                   <td>{{ empresa.idEmpresa }}</td>
                   <td>{{ empresa.razonSocial }}</td>
+                  <td>{{ empresa.nombre }}</td>
                   <td>{{ empresa.rfc }}</td>
                   <td>{{ empresa.giro }}</td>
-                   <td>{{ empresa.pais }}</td>
+                  <td>{{ empresa.pais }}</td>
                   <td>{{ empresa.estado }}</td>
+                  <td>{{ empresa.ciudad }}</td>
+                  <td>{{ empresa.colonia }}</td>
+                  <td>{{ empresa.calle }}</td>
+                  <td>{{ empresa.numero }}</td>
+                  <td>{{ empresa.numeroInterior }}</td>
+                  <td>{{ empresa.cp }}</td>
                   <td>{{ empresa.sectorEmpresa }}</td>
                   <td><button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Acciones</button>
                   <div class="dropdown-menu" style="">
