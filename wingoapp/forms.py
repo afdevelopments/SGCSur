@@ -4,12 +4,6 @@ from django.forms import ModelForm
 
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
-import pycountry
-import gettext
-
-español = gettext.translation('iso3166', pycountry.LOCALES_DIR, languages=['es'])
-español.install()
-_ = español.gettext
 
 
 class TaskForm(forms.ModelForm):
