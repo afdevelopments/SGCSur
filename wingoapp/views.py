@@ -1709,16 +1709,37 @@ def empresas_agregar(request):
 @login_required(login_url="/login")
 def empresas_modificar(request, pk):
     empresa = get_object_or_404(Empresa, idEmpresa=pk)
-    form = EmpresaForm(initial={"razonSocial": empresa.razonSocial, "rfc": empresa.rfc, "giro": empresa.giro,
+    form = EmpresaForm(initial={"razonSocial": empresa.razonSocial, "nombre": empresa.nombre,
+                                "rfc": empresa.rfc, "giro": empresa.giro, "pais": empresa.pais, "estado": empresa.estado,
+                                "ciudad": empresa.ciudad, "colonia": empresa.colonia, "calle": empresa.calle,
+                                "numero": empresa.numero, "numeroInterior": empresa.numeroInterior, "cp": empresa.cp,
                                 "sectorEmpresa": empresa.sectorEmpresa})
     if request.POST:
-        nomEmpresa = request.POST['razonSocial']
+        razonSocialEmpresa = request.POST['razonSocial']
+        nomEmpresa = request.POST['nombre']
         rfcEmpresa = request.POST['rfc']
         giroEmpresa = request.POST['giro']
+        pais = request.POST['pais']
+        estado = request.POST['estado']
+        ciudad = request.POST['ciudad']
+        colonia = request.POST['colonia']
+        calle = request.POST['calle']
+        numero = request.POST['numero']
+        numeroInterior = request.POST['numeroInterior']
+        cp = request.POST['cp']
         sector = request.POST['sectorEmpresa']
-        empresa.razonSocial = nomEmpresa
+        empresa.razonSocial = razonSocialEmpresa
+        empresa.nombre = nomEmpresa
         empresa.rfc = rfcEmpresa
         empresa.giro = giroEmpresa
+        empresa.pais = pais
+        empresa.estado = estado
+        empresa.ciudad = ciudad
+        empresa.colonia = colonia
+        empresa.calle = calle
+        empresa.numero = numero
+        empresa.numeroInterior = numeroInterior
+        empresa.cp = cp
         empresa.sectorEmpresa = sector
         empresa.save()
         return redirect('empresas')

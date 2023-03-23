@@ -1,8 +1,6 @@
 from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.safestring import mark_safe
-
-
 # Create your models here.
 
 
@@ -19,6 +17,8 @@ class Empresa(models.Model):
     idEmpresa = models.AutoField(primary_key=True, verbose_name='ID del contacto')
     razonSocial = models.CharField(verbose_name='Razón social de la empresa', max_length=200,
                                    help_text="Ingrese la razón social de la empresa")
+    nombre = models.CharField(verbose_name='Nombre conocido de la empresa', max_length=200,
+                                   help_text="Ingrese el nombre conocido de la empresa")
     rfc = models.CharField(max_length=13, verbose_name='RFC',
                            help_text=mark_safe(
                                '12-13 caracteres <a href="https://www.sat.gob.mx/consultas/44083/consulta-tu'
@@ -32,6 +32,22 @@ class Empresa(models.Model):
                            )
     giro = models.CharField(verbose_name='Giro de la empresa', max_length=50,
                             help_text="Ingrese el giro de la empresa")
+    pais = models.CharField(verbose_name='Pais de la empresa', max_length=50, help_text="Seleccione el pais",
+                            null=False)
+    estado = models.CharField(verbose_name='Estado de la empresa', max_length=50, help_text="Seleccione el estado",
+                              null=False)
+    ciudad = models.CharField(verbose_name='Ciudad de la empresa', max_length=200,
+                                   help_text="Ingrese la ciudad donde está ubicada la empresa", null=False)
+    colonia = models.CharField(verbose_name='Colonia de la empresa', max_length=200,
+                                   help_text="Ingrese la colonia donde está ubicada la empresa", null=False)
+    calle = models.CharField(verbose_name='Calle de la empresa', max_length=200,
+                                   help_text="Ingrese la calle donde está ubicada la empresa", null=False)
+    numero = models.CharField(verbose_name='Número de local de la empresa', max_length=10,
+                                   help_text="Ingrese el número del local donde está ubicada la empresa", null=False)
+    numeroInterior = models.CharField(verbose_name='Número interior de la empresa', max_length=10,
+                                   help_text="Ingrese el número interior del local donde está ubicada la empresa", null=False)
+    cp = models.CharField(max_length=5, verbose_name='Código postal de la empresa',
+                                   help_text="Ingrese el código postal de la empresa", null=False)
     sectores = [
         ("Público", "Público"),
         ("Privado", "Privado"),
@@ -41,7 +57,6 @@ class Empresa(models.Model):
     sectorEmpresa = models.CharField(choices=sectores, default="Privado", max_length=20,
                                      help_text="Ingrese el sector", verbose_name='Sector de la empresa'
                                      )
-
     def __str__(self):
         return self.razonSocial
 
