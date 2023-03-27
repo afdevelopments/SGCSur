@@ -65,7 +65,7 @@ class Contacto(models.Model):
     idContacto = models.AutoField(primary_key=True, verbose_name='ID del contacto')
     nombre = models.CharField(verbose_name='Nombre del contacto', max_length=50,
                               help_text="Ingrese el nombre del contacto")
-    numTelefono = models.CharField(max_length=10,
+    numTelefono = models.CharField(max_length=15,
                                    help_text="Ingrese el número de teléfono del contacto", verbose_name='Número de '
                                                                                                         'Teléfono', )
     idEmpresa = models.ForeignKey(Empresa, on_delete=models.CASCADE,

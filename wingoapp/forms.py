@@ -66,7 +66,7 @@ class EmpresaForm(ModelForm):
 # Formulario de añadir / modificar contacto
 class ContactoForm(ModelForm):
     nombre = forms.CharField(max_length=50, label="Nombre del contacto")
-    numTelefono = forms.CharField(max_length=10, label="Número de teléfono")
+    numTelefono = forms.CharField(max_length=15, label="Número de teléfono")
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
     email = forms.EmailField(max_length=254, label="Correo electrónico")
 
