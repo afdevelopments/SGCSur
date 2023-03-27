@@ -2,6 +2,7 @@ from django.core.validators import RegexValidator
 from django.db import models
 from django.utils.safestring import mark_safe
 from django.utils import timezone
+from datetime import timedelta
 # Create your models here.
 
 
@@ -117,6 +118,9 @@ class Convenio(models.Model):
 
     def activo(self):
         return self.inicioVigencia <= timezone.now().date() <= self.finVigencia
+    
+    def casiExpirado(self):
+        return self.finVigencia - timedelta(days=30) <= timezone.now().date() < self.finVigencia
 
     def __str__(self):
         return self.numConvenio
