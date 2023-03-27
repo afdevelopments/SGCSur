@@ -5,11 +5,43 @@
   <div class="card-header pb-0">
     <h5>Añadir</h5><span>Para agregar un contacto, por favor rellene el siguiente formulario.</span>
   </div>
-    <form class="form theme-form" method="post" action="{% url 'contactos_agregar' %}" enctype="multipart/form-data">
+    <form class="form theme-form" method="post" action="{% url 'contactos_agregar' %}" enctype="multipart/form-data"
+    id="contacto-form">
         <div class="card-body">
             {% csrf_token %}
             {{ form|crispy }}
             <button class="btn crispy_forms btn-primary" type="submit">Añadir</button>
+            <br>
+            <p id="contacto-form-errors" style="color: red"></p>
         </div>
     </form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#contacto-form').on('submit', function (event) {
+                //Prevenir el envío del form
+                event.preventDefault();
+                //Obtener Valores de los campos
+                const nombre = $('#id_nombre').val();
+                const num = $('#id_numTelefono').val();
+                //Regex
+                const nombreReg = /^[a-zA-ZáéíóúÁÉÍÓÚ\s]{1,60}$/;
+                const numReg = /(\+\d{2,3}){0,1}( {1}|-{1}){0,1}(\d{10})/;
+                let errors = []
+                //Meter los errores en el arreglo
+                if(!nombreReg.test(nombre)){
+                    errors.push("El nombre solo puede contener letras y debe de ser menor a 60 caracteres")
+                }
+                if (!numReg.test(num)){
+                    errors.push("El número de teléfono debe estar en el formato +xx xxxxxxxxxx, +xx-xxxxxxxxxx o xxxxxxxxxx")
+                }
+                if (errors.length > 0){
+                    $('#contacto-form-errors').html(errors.join('<br>'));
+                    return;
+                }
+                // Enviar el formulario si los campos son válidos
+                this.submit();
+            });
+        });
+    </script>
 </div>

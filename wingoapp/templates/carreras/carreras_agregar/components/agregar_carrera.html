@@ -5,11 +5,43 @@
   <div class="card-header pb-0">
     <h5>Añadir</h5><span>Para agregar una carrera, por favor rellene el siguiente formulario.</span>
   </div>
-    <form class="form theme-form" method="post" action="{% url 'carreras_agregar' %}" enctype="multipart/form-data">
+    <form class="form theme-form" method="post" action="{% url 'carreras_agregar' %}" enctype="multipart/form-data" id ="carrera-form">
         <div class="card-body">
             {% csrf_token %}
             {{ form|crispy }}
             <button class="btn crispy_forms btn-primary" type="submit">Añadir</button>
+            <br>
+            <p id="carrera-form-errors" style="color: red"></p>
         </div>
     </form>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            // Agregar evento de escucha para el evento "submit" del formulario
+            $('#carrera-form').on('submit', function(event) {
+                // Detener la acción por defecto del formulario
+                event.preventDefault();
+                // Obtener los valores de los campos del formulario
+                const nombreCarrera = $('#id_nombreCarrera').val();
+                const divisionCarrera = $('#id_divisionCarrera').val();
+                // Validar los campos utilizando expresiones regulares
+                const nombreCarreraRegex = /^[a-zA-ZáéíóúÁÉÍÓÚ\s]{1,50}$/;
+                const divisionCarreraRegex = /^(Ciencias Sociales y Humanidades|Ciencias Exactas, Naturales y Tecnológicas|Ciencias de la Salud)$/;
+                // Mostrar mensajes de error si los campos no son válidos
+                let errors = [];
+                if (!nombreCarreraRegex.test(nombreCarrera)) {
+                    errors.push('El nombre de la carrera debe contener entre 1 y 50 caracteres y solo letras y espacios.');
+                }
+                if (!divisionCarreraRegex.test(divisionCarrera)) {
+                    errors.push('La división de la carrera seleccionada no es válida.');
+                }
+                if (errors.length > 0) {
+                    $('#carrera-form-errors').html(errors.join('<br>'));
+                    return;
+                }
+                // Enviar el formulario si los campos son válidos
+                this.submit();
+            });
+        });
+    </script>
 </div>

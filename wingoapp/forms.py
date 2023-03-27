@@ -1,17 +1,10 @@
 from dataclasses import field
 from django import forms
 from django.forms import ModelForm, DateInput
+from django.shortcuts import render
 
 from .models import *
 from django.contrib.auth.forms import AuthenticationForm, UsernameField
-
-
-class TaskForm(forms.ModelForm):
-    title = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'placeholder': 'Enter new task here. . .'}))
-
-    class Meta:
-        model = Task
-        fields = '__all__'
 
 
 # Para cambiar el label del usuario y contraseña
@@ -46,17 +39,16 @@ class EmpresaForm(ModelForm):
     nombre = forms.CharField(max_length=200, label="Nombre conocido de la empresa", required=False)
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
-    pais = forms.CharField(label="Pais de la empresa", widget=forms.widgets.Select(attrs={
+    pais = forms.CharField(label="Pais", widget=forms.widgets.Select(attrs={
         'onchange': "print_state('state',this.selectedIndex);", 'id': 'country', 'name': 'country'
     }))
-    estado = forms.CharField(label="Estado de la empresa", widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
-    ciudad = forms.CharField(max_length=200, label="Ciudad donde está ubicada la empresa")
-    colonia = forms.CharField(max_length=200, label="Colonia donde está ubicada la empresa")
-    calle = forms.CharField(max_length=200, label="Calle donde está ubicada la empresa")
-    numero = forms.CharField(max_length=10, label="Número del local de la empresa")
-    numeroInterior = forms.CharField(max_length=10, label="Número interior del local de la empresa", required=False)
-    cp = forms.CharField(max_length=5, label="Código postal de la empresa")
-
+    estado = forms.CharField(label="Estado", widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
+    ciudad = forms.CharField(max_length=200, label="Ciudad")
+    colonia = forms.CharField(max_length=200, label="Colonia")
+    calle = forms.CharField(max_length=200, label="Calle")
+    numero = forms.CharField(max_length=10, label="Número")
+    numeroInterior = forms.CharField(max_length=10, label="Número interior", required=False)
+    cp = forms.CharField(max_length=5, label="Código postal")
     sectoresMenu = [
         ("Público", "Público"),
         ("Privado", "Privado"),
@@ -74,7 +66,7 @@ class EmpresaForm(ModelForm):
 # Formulario de añadir / modificar contacto
 class ContactoForm(ModelForm):
     nombre = forms.CharField(max_length=50, label="Nombre del contacto")
-    numTelefono = forms.CharField(max_length=10, label="Número de teléfono")
+    numTelefono = forms.CharField(max_length=15, label="Número de teléfono")
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
     email = forms.EmailField(max_length=254, label="Correo electrónico")
 
