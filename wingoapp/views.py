@@ -1965,7 +1965,7 @@ def reportes(request):
         idEmpresa = cleaned_data['idEmpresa']
         fecha_inicio = cleaned_data['fecha_inicio']
         fecha_vigencia = cleaned_data['fecha_vigencia']
-        
+        estado = cleaned_data['estado']
         print("Fecha de vigencia:", fecha_vigencia)
 
         q_objects = Q()
@@ -1989,6 +1989,13 @@ def reportes(request):
             else:
                 error_message = "El formato de fecha debe ser 'DD/MM/YYYY - DD/MM/YYYY'."
 
+        if estado == 'activo':
+            q_objects &= Q(inicioVigencia__lte=timezone.now().date(), finVigencia__gte=timezone.now().date())
+        elif estado == 'casi_expirado':
+            q_objects &= Q(finVigencia__gt=timezone.now().date(),
+                           finVigencia__lte=timezone.now().date() + timedelta(days=30))
+        elif estado == 'expirado':
+            q_objects &= Q(finVigencia__lt=timezone.now().date())
         lista_convenios = lista_convenios.filter(q_objects)
 
     context = {
@@ -2035,9 +2042,11 @@ def export_convenios_excel(request):
 
     # Llenar la hoja de trabajo con los datos de convenios
     for row_num, convenio in enumerate(convenios, 2):
+        estado = convenio.estado
+        print(estado)
         row_data = [
             convenio.numConvenio,
-            "Activo" if convenio.activo() else ("Casi expirado" if convenio.casiExpirado() else "Expirado"),
+            estado,
             convenio.idCarrera.nombreCarrera,
             convenio.idCarrera.idCarrera,
             convenio.idCarrera.divisionCarrera,
@@ -2055,9 +2064,9 @@ def export_convenios_excel(request):
             cell.value = cell_value
 
             # Aplicar el estilo según el estado del convenio
-            if convenio.activo():
+            if estado == "Activo":
                 cell.fill = activo_fill
-            elif convenio.casiExpirado():
+            elif estado == "Casi expirado":
                 cell.fill = casi_expirado_fill
             else:
                 cell.fill = expirado_fill

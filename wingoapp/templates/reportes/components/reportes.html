@@ -51,6 +51,15 @@
                     <input type="text" class="form-control" id="id_fecha_vigencia" name="fecha_vigencia"
                            data-bs-toggle="daterangepicker">
                 </div>
+                <div class="col-md-4">
+                    <label for="id_estado">Estado de convenio</label>
+                    <select class="form-control" id="id_estado" name="estado">
+                        <option value="">Todos</option>
+                        <option value="activo">Activo</option>
+                        <option value="casi_expirado">Casi expirado</option>
+                        <option value="expirado">Expirado</option>
+                    </select>
+                </div>
             </div>
 
             <div class="row mt-3">
@@ -81,9 +90,9 @@
                             {% else %}class="expirado"{% endif %}>
                             <td>{{ convenio.numConvenio }}</td>
                             <td>
-                                {% if convenio.activo %}
+                                {% if convenio.estado == "Activo" %}
                                     <span class="badge badge-success">Activo</span>
-                                {% elif convenio.casiExpirado %}
+                                {% elif convenio.estado == "Casi expirado" %}
                                     <span class="badge badge-warning text-dark">Casi expirado</span>
                                 {% else %}
                                     <span class="badge badge-danger">Expirado</span>

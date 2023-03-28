@@ -111,10 +111,13 @@ class ReporteConveniosForm(forms.Form):
     idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)
     fecha_inicio = forms.DateField(required=False, input_formats=["%Y-%m-%d"])
     fecha_vigencia = forms.CharField(required=False)
-
+    estado = forms.ChoiceField(
+        choices=[('activo', 'Activo'), ('casi_expirado', 'Casi expirado'), ('expirado', 'Expirado')],
+        required=False)
 
     def clean_fecha_vigencia(self):
         fecha_vigencia = self.cleaned_data.get('fecha_vigencia')
+
         if not fecha_vigencia or fecha_vigencia == 'Todas las fechas':
             return None
         try:

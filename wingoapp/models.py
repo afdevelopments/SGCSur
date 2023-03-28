@@ -114,5 +114,15 @@ class Convenio(models.Model):
     def casiExpirado(self):
         return self.finVigencia - timedelta(days=30) <= timezone.now().date() < self.finVigencia
 
+    @property
+    def estado(self):
+        if self.inicioVigencia > timezone.now().date():
+            return "No iniciado"
+        elif self.finVigencia < timezone.now().date():
+            return "Expirado"
+        elif self.finVigencia - timedelta(days=30) <= timezone.now().date() < self.finVigencia:
+            return "Casi expirado"
+        else:
+            return "Activo"
     def __str__(self):
         return self.numConvenio
