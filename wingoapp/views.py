@@ -1711,7 +1711,8 @@ def empresas_agregar(request):
 def empresas_modificar(request, pk):
     empresa = get_object_or_404(Empresa, idEmpresa=pk)
     form = EmpresaForm(initial={"razonSocial": empresa.razonSocial, "nombre": empresa.nombre,
-                                "rfc": empresa.rfc, "giro": empresa.giro, "pais": empresa.pais, "estado": empresa.estado,
+                                "rfc": empresa.rfc, "giro": empresa.giro, "pais": empresa.pais,
+                                "estado": empresa.estado,
                                 "ciudad": empresa.ciudad, "colonia": empresa.colonia, "calle": empresa.calle,
                                 "numero": empresa.numero, "numeroInterior": empresa.numeroInterior, "cp": empresa.cp,
                                 "sectorEmpresa": empresa.sectorEmpresa})
@@ -1944,6 +1945,8 @@ from functools import reduce
 from operator import or_
 from django.db.models import Q
 from django.db.models import QuerySet
+
+
 # Módulo de reportes
 # views.py
 
@@ -1980,14 +1983,14 @@ def reportes(request):
         if fecha_vigencia is not None and fecha_vigencia != 'Todas las fechas':
             rango_fechas = fecha_vigencia.split(' - ')
             if len(rango_fechas) == 2:
-                fecha_inicio = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
-                fecha_fin = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
-                q_objects &= Q(inicioVigencia__range=(fecha_inicio, fecha_fin))
+                fecha_inicio_vigencia = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
+                fecha_fin_vigencia = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
+                q_objects &= Q(inicioVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia)) | Q(
+                    finVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia))
             else:
                 error_message = "El formato de fecha debe ser 'YYYY-MM-DD - YYYY-MM-DD'."
 
         lista_convenios = lista_convenios.filter(q_objects)
-
 
     context = {
         'form': form,
@@ -2003,6 +2006,7 @@ def reportes(request):
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
+
 
 def export_convenios_excel(request):
     convenios = Convenio.objects.all().order_by('-inicioVigencia')
