@@ -5,6 +5,7 @@ from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirect
 from django.views import generic
 from django.urls import reverse
+from django.db.models import Q
 from .models import *
 from .forms import *
 from django.views.generic import (
@@ -1935,3 +1936,104 @@ def convenios_ver(request, pk):
         "convenio": convenio,
     }
     return render(request, 'convenios/convenios_ver/convenios_ver.html', context)
+
+
+# Módulo de reportes
+
+from functools import reduce
+from operator import or_
+from django.db.models import Q
+from django.db.models import QuerySet
+# Módulo de reportes
+# views.py
+
+def reportes(request):
+    lista_convenios = Convenio.objects.all().order_by('-inicioVigencia')
+    empresas = Empresa.objects.all()
+    carreras = Carreras.objects.all()
+    error_message = None
+
+    earliest_convenio = Convenio.objects.order_by('inicioVigencia').first()
+    min_date = earliest_convenio.inicioVigencia if earliest_convenio else None
+
+    form = ReporteConveniosForm(request.GET, initial={'fecha_inicio': min_date})
+
+    if request.method == "GET" and form.is_valid():
+        cleaned_data = form.cleaned_data
+        idCarrera = cleaned_data['idCarrera']
+        idEmpresa = cleaned_data['idEmpresa']
+        fecha_inicio = cleaned_data['fecha_inicio']
+        fecha_vigencia = cleaned_data['fecha_vigencia']
+        print("Fecha de vigencia:", fecha_vigencia)
+
+        q_objects = Q()
+
+        if idCarrera:
+            q_objects &= reduce(or_, [Q(idCarrera=carrera) for carrera in idCarrera])
+
+        if idEmpresa:
+            q_objects &= reduce(or_, [Q(idEmpresa=empresa) for empresa in idEmpresa])
+
+        if fecha_inicio:
+            q_objects &= Q(inicioVigencia__gte=fecha_inicio)
+
+        if fecha_vigencia is not None and fecha_vigencia != 'Todas las fechas':
+            rango_fechas = fecha_vigencia.split(' - ')
+            if len(rango_fechas) == 2:
+                fecha_inicio = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
+                fecha_fin = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
+                q_objects &= Q(inicioVigencia__range=(fecha_inicio, fecha_fin))
+            else:
+                error_message = "El formato de fecha debe ser 'YYYY-MM-DD - YYYY-MM-DD'."
+
+        lista_convenios = lista_convenios.filter(q_objects)
+
+
+    context = {
+        'form': form,
+        'lista_convenios': lista_convenios,
+        'empresas': empresas,
+        'carreras': carreras,
+        'error_message': error_message,
+        'min_date': min_date
+    }
+    return render(request, 'reportes/reportes.html', context)
+
+
+from django.http import HttpResponse
+from openpyxl import Workbook
+from openpyxl.utils import get_column_letter
+
+def export_convenios_excel(request):
+    convenios = Convenio.objects.all().order_by('-inicioVigencia')
+
+    # Crear el archivo de Excel y agregar una hoja de trabajo
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = "Convenios"
+
+    # Agregar encabezados
+    headers = ['Carrera', 'Inicio de vigencia', 'Fin de vigencia', 'Empresa', 'Observaciones']
+    for col_num, header in enumerate(headers, 1):
+        col_letter = get_column_letter(col_num)
+        worksheet['{}1'.format(col_letter)] = header
+        worksheet.column_dimensions[col_letter].width = 20
+
+    # Llenar la hoja de trabajo con los datos de convenios
+    for row_num, convenio in enumerate(convenios, 2):
+        row_data = [
+            convenio.idCarrera.nombreCarrera,
+            convenio.inicioVigencia,
+            convenio.finVigencia,
+            convenio.idEmpresa.razonSocial,
+            convenio.observaciones
+        ]
+        for col_num, cell_value in enumerate(row_data, 1):
+            worksheet.cell(row=row_num, column=col_num).value = cell_value
+
+    # Crear la respuesta HTTP con el archivo Excel
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    response['Content-Disposition'] = 'attachment; filename=convenios.xlsx'
+    workbook.save(response)
+
+    return response

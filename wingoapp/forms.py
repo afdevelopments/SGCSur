@@ -1,17 +1,9 @@
 from dataclasses import field
 from django import forms
+from django.contrib.auth.forms import AuthenticationForm, UsernameField
 from django.forms import ModelForm, DateInput
 
 from .models import *
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
-
-
-class TaskForm(forms.ModelForm):
-    title = forms.CharField(max_length=200, widget=forms.Textarea(attrs={'placeholder': 'Enter new task here. . .'}))
-
-    class Meta:
-        model = Task
-        fields = '__all__'
 
 
 # Para cambiar el label del usuario y contraseña
@@ -49,7 +41,8 @@ class EmpresaForm(ModelForm):
     pais = forms.CharField(label="Pais de la empresa", widget=forms.widgets.Select(attrs={
         'onchange': "print_state('state',this.selectedIndex);", 'id': 'country', 'name': 'country'
     }))
-    estado = forms.CharField(label="Estado de la empresa", widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
+    estado = forms.CharField(label="Estado de la empresa",
+                             widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
     ciudad = forms.CharField(max_length=200, label="Ciudad donde está ubicada la empresa")
     colonia = forms.CharField(max_length=200, label="Colonia donde está ubicada la empresa")
     calle = forms.CharField(max_length=200, label="Calle donde está ubicada la empresa")
@@ -65,10 +58,12 @@ class EmpresaForm(ModelForm):
     ]
     sectorEmpresa = forms.CharField(max_length=100, label="Sector de la empresa",
                                     widget=forms.Select(choices=sectoresMenu))
-# Class Meta para definir el modelo y los campos que se van a mostrar
+
+    # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Empresa
-        fields = ['razonSocial', 'nombre','rfc', 'giro', 'pais', 'estado', 'ciudad', 'colonia', 'calle', 'numero', 'numeroInterior', 'cp', 'sectorEmpresa']
+        fields = ['razonSocial', 'nombre', 'rfc', 'giro', 'pais', 'estado', 'ciudad', 'colonia', 'calle', 'numero',
+                  'numeroInterior', 'cp', 'sectorEmpresa']
 
 
 # Formulario de añadir / modificar contacto
@@ -89,7 +84,7 @@ class ConvenioForm(ModelForm):
     inicioVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente desde")
     finVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente hasta")
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
-    observaciones = forms.CharField( widget=forms.Textarea, label="Observaciones", required=False)
+    observaciones = forms.CharField(widget=forms.Textarea, label="Observaciones", required=False)
 
     # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
@@ -99,3 +94,33 @@ class ConvenioForm(ModelForm):
             'inicioVigencia': DateInput(),
             'finVigencia': DateInput(),
         }
+
+
+# Formulario para filtrado de reportes:
+
+from datetime import datetime
+
+
+from django import forms
+from django.core.exceptions import ValidationError
+from datetime import datetime
+
+# forms.py
+class ReporteConveniosForm(forms.Form):
+    idCarrera = forms.ModelMultipleChoiceField(queryset=Carreras.objects.all(), required=False)
+    idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)
+    fecha_inicio = forms.DateField(required=False, input_formats=["%Y-%m-%d"])
+    fecha_vigencia = forms.CharField(required=False)
+
+    def clean_fecha_vigencia(self):
+        fecha_vigencia = self.cleaned_data.get('fecha_vigencia')
+        if not fecha_vigencia or fecha_vigencia == 'Todas las fechas':
+            return None
+        try:
+            rango_fechas = fecha_vigencia.split(' - ')
+            fecha_inicio = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
+            fecha_fin = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
+            result = f'{fecha_inicio:%Y-%m-%d} - {fecha_fin:%Y-%m-%d}'
+            return result
+        except (ValueError, IndexError):
+            raise forms.ValidationError("El formato de fecha debe ser 'YYYY-MM-DD - YYYY-MM-DD'.")

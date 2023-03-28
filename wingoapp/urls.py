@@ -69,5 +69,8 @@ urlpatterns = [
     path('convenios_eliminar/<int:pk>', views.convenios_eliminar, name='convenios_eliminar'),
     path('convenios_ver/<int:pk>', views.convenios_ver, name='convenios_ver'),
 
-
+    # reportes
+    path('reportes/', views.reportes, name='reportes'),
+    # exportar reporte
+    path('export_convenios_excel/', views.export_convenios_excel, name='export_convenios_excel'),
 ]
