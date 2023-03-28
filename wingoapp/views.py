@@ -2004,7 +2004,8 @@ def reportes(request):
         'empresas': empresas,
         'carreras': carreras,
         'error_message': error_message,
-        'min_date': min_date
+        'min_date': min_date,
+        'breadcrumb': {"parent": "Reportes", "child": "Reportes de convenios"}
     }
     return render(request, 'reportes/reportes.html', context)
 

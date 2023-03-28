@@ -29,13 +29,15 @@
                   <td>{{ convenio.idCarrera.nombreCarrera }}</td>
                   <td>{{ convenio.inicioVigencia }}</td>
                   <td>{{ convenio.finVigencia }}</td>
-                  {% if convenio.casiExpirado %}
-                    <td style="width: 5%; text-align: center;"><img src="{%  static 'assets/images/estado_convenio/caution.png' %}" alt="Convenio próximo a expirar" style="width: 50%;"></td>
-                  {% elif convenio.activo %}
-                    <td style="width: 5%; text-align: center;"><img src="{%  static 'assets/images/estado_convenio/activo.png' %}" alt="Convenio activo" style="width: 50%;"></td>
-                  {% else %}
-                    <td style="width: 5%; text-align: center;"><img src="{% static 'assets/images/estado_convenio/expirado.png' %}" alt="Convenio expirado" style="width: 50%;"></td>
-                  {% endif %}
+                 <td>
+                                {% if convenio.estado == "Activo" %}
+                                    <span class="badge badge-success">Activo</span>
+                                {% elif convenio.estado == "Casi expirado" %}
+                                    <span class="badge badge-warning text-dark">Casi expirado</span>
+                                {% else %}
+                                    <span class="badge badge-danger">Expirado</span>
+                                {% endif %}
+                            </td>
                   <td>{{ convenio.observaciones }}</td>
                   <td><button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown"
                               aria-haspopup="true" aria-expanded="false">
