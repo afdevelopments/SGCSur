@@ -1949,13 +1949,11 @@ from django.db.models import QuerySet
 
 # Módulo de reportes
 # views.py
-
 def reportes(request):
     lista_convenios = Convenio.objects.all().order_by('-inicioVigencia')
-    empresas = Empresa.objects.all()
-    carreras = Carreras.objects.all()
+    empresas = Empresa.objects.filter(convenio__isnull=False).distinct()
+    carreras = Carreras.objects.filter(convenio__isnull=False).distinct()
     error_message = None
-
     earliest_convenio = Convenio.objects.order_by('inicioVigencia').first()
     min_date = earliest_convenio.inicioVigencia if earliest_convenio else None
 
@@ -1967,6 +1965,7 @@ def reportes(request):
         idEmpresa = cleaned_data['idEmpresa']
         fecha_inicio = cleaned_data['fecha_inicio']
         fecha_vigencia = cleaned_data['fecha_vigencia']
+        
         print("Fecha de vigencia:", fecha_vigencia)
 
         q_objects = Q()
@@ -1985,10 +1984,10 @@ def reportes(request):
             if len(rango_fechas) == 2:
                 fecha_inicio_vigencia = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
                 fecha_fin_vigencia = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
-                q_objects &= Q(inicioVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia)) | Q(
-                    finVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia))
+                q_objects &= (Q(inicioVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia)) |
+                              Q(finVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia)))
             else:
-                error_message = "El formato de fecha debe ser 'YYYY-MM-DD - YYYY-MM-DD'."
+                error_message = "El formato de fecha debe ser 'DD/MM/YYYY - DD/MM/YYYY'."
 
         lista_convenios = lista_convenios.filter(q_objects)
 
@@ -2006,7 +2005,8 @@ def reportes(request):
 from django.http import HttpResponse
 from openpyxl import Workbook
 from openpyxl.utils import get_column_letter
-
+from openpyxl.styles import PatternFill
+from datetime import datetime
 
 def export_convenios_excel(request):
     convenios = Convenio.objects.all().order_by('-inicioVigencia')
@@ -2017,7 +2017,17 @@ def export_convenios_excel(request):
     worksheet.title = "Convenios"
 
     # Agregar encabezados
-    headers = ['Carrera', 'Inicio de vigencia', 'Fin de vigencia', 'Empresa', 'Observaciones']
+    headers = [
+        'ID Convenio', 'Estado',
+        'Carrera', 'ID Carrera', 'División Carrera', 'Empresa',
+        'Nombre Empresa', 'ID Empresa', 'Giro Empresa', 'Sector Empresa',
+        'Inicio de vigencia', 'Fin de vigencia', 'Observaciones'
+    ]
+    # Definir los estilos de celda para los estados de los convenios
+    activo_fill = PatternFill(start_color="c3e6cb", end_color="c3e6cb", fill_type="solid")
+    casi_expirado_fill = PatternFill(start_color="ffeeba", end_color="ffeeba", fill_type="solid")
+    expirado_fill = PatternFill(start_color="f5c6cb", end_color="f5c6cb", fill_type="solid")
+
     for col_num, header in enumerate(headers, 1):
         col_letter = get_column_letter(col_num)
         worksheet['{}1'.format(col_letter)] = header
@@ -2026,18 +2036,40 @@ def export_convenios_excel(request):
     # Llenar la hoja de trabajo con los datos de convenios
     for row_num, convenio in enumerate(convenios, 2):
         row_data = [
+            convenio.numConvenio,
+            "Activo" if convenio.activo() else ("Casi expirado" if convenio.casiExpirado() else "Expirado"),
             convenio.idCarrera.nombreCarrera,
+            convenio.idCarrera.idCarrera,
+            convenio.idCarrera.divisionCarrera,
+            convenio.idEmpresa.razonSocial,
+            convenio.idEmpresa.nombre,
+            convenio.idEmpresa.idEmpresa,
+            convenio.idEmpresa.giro,
+            convenio.idEmpresa.sectorEmpresa,
             convenio.inicioVigencia,
             convenio.finVigencia,
-            convenio.idEmpresa.razonSocial,
-            convenio.observaciones
+            convenio.observaciones,
         ]
         for col_num, cell_value in enumerate(row_data, 1):
-            worksheet.cell(row=row_num, column=col_num).value = cell_value
+            cell = worksheet.cell(row=row_num, column=col_num)
+            cell.value = cell_value
+
+            # Aplicar el estilo según el estado del convenio
+            if convenio.activo():
+                cell.fill = activo_fill
+            elif convenio.casiExpirado():
+                cell.fill = casi_expirado_fill
+            else:
+                cell.fill = expirado_fill
 
     # Crear la respuesta HTTP con el archivo Excel
     response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
-    response['Content-Disposition'] = 'attachment; filename=convenios.xlsx'
+
+    # Formatear la fecha y hora actual como una cadena y usarla en el nombre del archivo
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = f'convenios_{now}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+
     workbook.save(response)
 
     return response

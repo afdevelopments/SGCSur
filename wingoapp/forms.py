@@ -112,15 +112,17 @@ class ReporteConveniosForm(forms.Form):
     fecha_inicio = forms.DateField(required=False, input_formats=["%Y-%m-%d"])
     fecha_vigencia = forms.CharField(required=False)
 
+
     def clean_fecha_vigencia(self):
         fecha_vigencia = self.cleaned_data.get('fecha_vigencia')
         if not fecha_vigencia or fecha_vigencia == 'Todas las fechas':
             return None
         try:
             rango_fechas = fecha_vigencia.split(' - ')
-            fecha_inicio = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
-            fecha_fin = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
+            fecha_inicio = datetime.strptime(rango_fechas[0], '%d/%m/%Y')
+            fecha_fin = datetime.strptime(rango_fechas[1], '%d/%m/%Y')
             result = f'{fecha_inicio:%Y-%m-%d} - {fecha_fin:%Y-%m-%d}'
             return result
         except (ValueError, IndexError):
-            raise forms.ValidationError("El formato de fecha debe ser 'YYYY-MM-DD - YYYY-MM-DD'.")
+            raise forms.ValidationError("El formato de fecha debe ser 'DD/MM/YYYY - DD/MM/YYYY'.")
+
