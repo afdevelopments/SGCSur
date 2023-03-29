@@ -1,2 +1,2 @@
-# Sistemita
-Sistema de digitalización de la unidad de vinculación del CUSur de la UDG
+# SGCSur
+Sistema de Gestión de Convenios del Centro Universitario del Sur
