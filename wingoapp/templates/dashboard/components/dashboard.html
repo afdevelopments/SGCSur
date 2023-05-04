@@ -1,6 +1,46 @@
 {% load static %}
 {% load sass_tags %}
 
+<!-- Nuevas tarjetas -->
+<div class="row">
+  <div class="col-sm-6 col-xl-4 col-lg-6">
+    <div class="card o-hidden">
+      <div class="bg-primary b-r-4 card-body">
+        <div class="media static-top-widget">
+          <div class="align-self-center text-center"><i data-feather="database"></i></div>
+          <div class="media-body"><span class="m-0">Número total de convenios</span>
+            <h4 class="mb-0 counter">{{ numero_total_convenios }}</h4><i class="icon-bg" data-feather="database"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-4 col-lg-6">
+    <div class="card o-hidden">
+      <div class="bg-secondary b-r-4 card-body">
+        <div class="media static-top-widget">
+          <div class="align-self-center text-center"><i data-feather="briefcase"></i></div>
+          <div class="media-body"><span class="m-0">Empresas con convenios activos</span>
+            <h4 class="mb-0 counter">{{ empresas_convenios_activos }}</h4><i class="icon-bg" data-feather="briefcase"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="col-sm-6 col-xl-4 col-lg-6">
+    <div class="card o-hidden">
+      <div class="bg-primary b-r-4 card-body">
+        <div class="media static-top-widget">
+          <div class="align-self-center text-center"><i data-feather="check-circle"></i></div>
+          <div class="media-body"><span class="m-0">Número total de convenios activos</span>
+            <h4 class="mb-0 counter">{{ convenios_activos }}</h4><i class="icon-bg" data-feather="check-circle"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
 <!-- Convenios por estado -->
 <div class="row">
   <div class="col-md-4">
@@ -8,46 +48,58 @@
       <div class="card-header">
         <h5 class="card-title">Convenios por estado</h5>
       </div>
-      <div class="card-body">
-        <p>Activos: {{ convenios_activos }}</p>
-        <p>Casi expirados: {{ convenios_casi_expirados }}</p>
-        <p>Expirados: {{ convenios_expirados }}</p>
-      </div>
+      <div class="card-body fs-5">
+  <div class="mb-3">
+          <span>Activos:</span> <span class="badge rounded-pill badge-success">{{ convenios_activos }}</span>
+        </div>
+        <div class="mb-3">
+          <span>Casi expirados:</span> <span class="badge rounded-pill badge-warning text-dark">{{ convenios_casi_expirados }}</span>
+        </div>
+        <div>
+          <span>Expirados:</span> <span class="badge rounded-pill badge-danger">{{ convenios_expirados }}</span>
+        </div>
+</div>
     </div>
   </div>
 
   <!-- Convenios por fecha de inicio -->
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title">Convenios por fecha de inicio</h5>
-      </div>
-      <div class="card-body">
-        <p>Últimos 30 días: {{ convenios_30_dias }}</p>
-        <p>Últimos 3 meses: {{ convenios_3_meses }}</p>
-        <p>Últimos 6 meses: {{ convenios_6_meses }}</p>
-        <p>Último año: {{ convenios_1_ano }}</p>
-      </div>
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Convenios por fecha de inicio</h5>
     </div>
-  </div>
-
-  <!-- Convenios por carrera -->
-  <div class="col-md-4">
-    <div class="card">
-      <div class="card-header">
-        <h5 class="card-title">Convenios por carrera (Top 5)</h5>
+    <div class="card-body fs-5">
+      <div class="mb-3">
+        <span>Últimos 30 días:</span> <span class="badge rounded-pill badge-primary">{{ convenios_30_dias }}</span>
       </div>
-      <div class="card-body">
-        <ol>
-{% for carrera in convenios_por_carrera %}
-<li>{{ carrera.nombreCarrera }}: {{ carrera.convenios_count }}</li>
-{% endfor %}
-        </ol>
+      <div class="mb-3">
+        <span>Últimos 3 meses:</span> <span class="badge rounded-pill badge-secondary">{{ convenios_3_meses }}</span>
+      </div>
+      <div class="mb-3">
+        <span>Últimos 6 meses:</span> <span class="badge rounded-pill badge-success">{{ convenios_6_meses }}</span>
+      </div>
+      <div>
+        <span>Último año:</span> <span class="badge rounded-pill badge-info">{{ convenios_1_ano }}</span>
       </div>
     </div>
   </div>
 </div>
-
+<!-- Convenios por carrera (Top 5) -->
+<div class="col-md-4">
+  <div class="card">
+    <div class="card-header">
+      <h5 class="card-title">Convenios por carrera (Top 5)</h5>
+    </div>
+    <div class="card-body fs-5">
+      {% for carrera in convenios_por_carrera %}
+        <div class="mb-2">
+          <span>{{ carrera.nombreCarrera }}:</span> <span class="badge rounded-pill badge-primary">{{ carrera.convenios_count }}</span>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</div>
+</div>
 <!-- Convenios próximos a expirar -->
 <div class="row">
   <div class="col-md-12">
@@ -79,5 +131,6 @@
 
 <!-- Gráficos y visualizaciones -->
 {% include 'components/dashboard_charts.html' %}
+
 
 

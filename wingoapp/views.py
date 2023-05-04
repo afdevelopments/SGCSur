@@ -2113,7 +2113,11 @@ def dashboard(request):
         .annotate(convenios_count=Count("numConvenio"))
         .order_by("month")
     )
+    #Numero total de convenios
+    numero_total_convenios = Convenio.objects.all().count()
 
+    #Numero de empresas con convenios activos
+    empresas_convenios_activos = Empresa.objects.filter(convenio__finVigencia__gte=today).distinct().count()
 
 
     # ... Realiza otras consultas y cálculos necesarios ...
@@ -2130,6 +2134,9 @@ def dashboard(request):
         'convenios_proximos_expirar': convenios_proximos_expirar,
         'convenios_por_carrera_json': json.dumps(list(convenios_por_carrera)),
         'convenios_por_mes_json': json.dumps(list(convenios_por_mes), cls=DjangoJSONEncoder),
+        'numero_total_convenios': numero_total_convenios,
+        'empresas_convenios_activos': empresas_convenios_activos,
+        'breadcrumb': {"parent": "Tablero de inicio", "child": "Tablero de inicio"},
         # ... Pasa otras variables de contexto necesarias ...
     }
     print(json.dumps(list(convenios_por_carrera)))
