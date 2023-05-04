@@ -6,7 +6,7 @@ urlpatterns = [
     # dashboard paths
 
     path('', views.indexPage, name='indexPage'),
-    path('dashboard_default', views.dashboard_default, name='index'),
+    path('dashboard_default', views.dashboard, name='index'),
     path('dashboard_ecommerce', views.dashboard_ecommerce, name='dashboard_ecommerce'),
 
     # users paths
@@ -73,4 +73,6 @@ urlpatterns = [
     path('reportes/', views.reportes, name='reportes'),
     # exportar reporte
     path('export_convenios_excel/', views.export_convenios_excel, name='export_convenios_excel'),
+
+    # dashboard
 ]

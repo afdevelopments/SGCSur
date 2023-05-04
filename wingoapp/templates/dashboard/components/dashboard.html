@@ -1,0 +1,83 @@
+{% load static %}
+{% load sass_tags %}
+
+<!-- Convenios por estado -->
+<div class="row">
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Convenios por estado</h5>
+      </div>
+      <div class="card-body">
+        <p>Activos: {{ convenios_activos }}</p>
+        <p>Casi expirados: {{ convenios_casi_expirados }}</p>
+        <p>Expirados: {{ convenios_expirados }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Convenios por fecha de inicio -->
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Convenios por fecha de inicio</h5>
+      </div>
+      <div class="card-body">
+        <p>Últimos 30 días: {{ convenios_30_dias }}</p>
+        <p>Últimos 3 meses: {{ convenios_3_meses }}</p>
+        <p>Últimos 6 meses: {{ convenios_6_meses }}</p>
+        <p>Último año: {{ convenios_1_ano }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Convenios por carrera -->
+  <div class="col-md-4">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Convenios por carrera (Top 5)</h5>
+      </div>
+      <div class="card-body">
+        <ol>
+{% for carrera in convenios_por_carrera %}
+<li>{{ carrera.nombreCarrera }}: {{ carrera.convenios_count }}</li>
+{% endfor %}
+        </ol>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Convenios próximos a expirar -->
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header">
+        <h5 class="card-title">Convenios próximos a expirar (próximos 30 días)</h5>
+      </div>
+      <div class="card-body">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Empresa</th>
+              <th>Fecha de expiración</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for convenio in convenios_proximos_expirar %}
+            <tr>
+              <td>{{ convenio.numConvenio }}</td>
+              <td>{{ convenio.finVigencia }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Gráficos y visualizaciones -->
+{% include 'components/dashboard_charts.html' %}
+
+

@@ -1,0 +1,29 @@
+<div class="row">
+  <div class="col-md-12">
+    <div class="card">
+      <div class="card-header pb-0">
+        <h5>Convenios por carrera</h5>
+      </div>
+      <div class="card-body">
+        <div id="convenios_por_carrera" style="width: 100%; height: 400px;"></div>
+      </div>
+    </div>
+  </div>
+ <!-- Gráfico de líneas mostrando la cantidad de convenios por mes en los últimos 12 meses -->
+
+
+ <div class="col-md-12">
+  <div class="card">
+    <div class="card-header pb-0">
+      <h5>Convenios por mes en los últimos 12 meses</h5>
+    </div>
+    <div class="card-body">
+      <div id="convenios_por_mes" style="width: 100%; height: 400px;"></div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+  const conveniosPorCarrera = JSON.parse('{{ convenios_por_carrera_json|safe }}');
+    const conveniosPorMes = JSON.parse('{{ convenios_por_mes_json|safe }}');
+</script>

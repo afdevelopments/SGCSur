@@ -125,4 +125,4 @@ class Convenio(models.Model):
         else:
             return "Activo"
     def __str__(self):
-        return self.numConvenio
+        return str(self.numConvenio) + " " + self.idEmpresa.razonSocial

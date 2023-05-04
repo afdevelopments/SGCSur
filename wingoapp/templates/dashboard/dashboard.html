@@ -1,0 +1,124 @@
+{% extends 'main-dashboard.html' %}
+
+{% block dashboard_content %}
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-4">
+                <h5>Convenios por estado</h5>
+                <canvas id="conveniosEstadoChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <h5>Convenios por fecha de inicio</h5>
+                <canvas id="conveniosFechaInicioChart"></canvas>
+            </div>
+            <div class="col-md-4">
+                <h5>Convenios por carrera</h5>
+                <canvas id="conveniosCarreraChart"></canvas>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-md-6">
+                <h5>Convenios próximos a expirar</h5>
+                <ul>
+                    {% for convenio in convenios_proximos_expirar %}
+                        <li>{{ convenio }}</li>
+                    {% endfor %}
+                </ul>
+            </div>
+            <div class="col-md-6">
+                <h5>Contacto de empresas</h5>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Empresa</th>
+                            <th>Contacto</th>
+                            <th>Email</th>
+                            <th>Teléfono</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for empresa in empresas_contactos %}
+                            <tr>
+                                <td>{{ empresa.razonSocial }}</td>
+                                <td>{{ empresa.contacto.nombre }}</td>
+                                <td>{{ empresa.contacto.email }}</td>
+                                <td>{{ empresa.contacto.numTelefono }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Convenios por estado
+        const conveniosEstadoCtx = document.getElementById('conveniosEstadoChart').getContext('2d');
+        const conveniosEstadoChart = new Chart(conveniosEstadoCtx, {
+            type: 'pie',
+            data: {
+                labels: ['Activos', 'Casi expirados', 'Expirados'],
+                datasets: [{
+                                        data: [{{ convenios_activos }}, {{ convenios_casi_expirados }}, {{ convenios_expirados }}],
+                    backgroundColor: ['#4caf50', '#ffeb3b', '#f44336'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                },
+            }
+        });
+
+        // Convenios por fecha de inicio
+        const conveniosFechaInicioCtx = document.getElementById('conveniosFechaInicioChart').getContext('2d');
+        const conveniosFechaInicioChart = new Chart(conveniosFechaInicioCtx, {
+            type: 'bar',
+            data: {
+                labels: {{ fechas_inicio|safe }},
+                datasets: [{
+                    label: 'Convenios por fecha de inicio',
+                    data: {{ convenios_por_fecha_inicio|safe }},
+                    backgroundColor: '#42a5f5',
+                }]
+            },
+            options: {
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                    },
+                },
+                plugins: {
+                    legend: {
+                        display: false,
+                    },
+                },
+            }
+        });
+
+        // Convenios por carrera
+        const conveniosCarreraCtx = document.getElementById('conveniosCarreraChart').getContext('2d');
+        const conveniosCarreraChart = new Chart(conveniosCarreraCtx, {
+            type: 'doughnut',
+            data: {
+                labels: {{ carreras|safe }},
+                datasets: [{
+                    data: {{ convenios_por_carrera|safe }},
+                    backgroundColor: ['#4caf50', '#ff9800', '#f44336', '#9c27b0', '#3f51b5'],
+                }]
+            },
+            options: {
+                plugins: {
+                    legend: {
+                        position: 'bottom',
+                    },
+                },
+            }
+        });
+
+    </script>
+{% endblock %}
+

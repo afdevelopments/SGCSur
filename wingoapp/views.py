@@ -1,3 +1,6 @@
+import json
+
+from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
@@ -20,6 +23,8 @@ from django.views.generic import (
 
 @login_required(login_url="/login")
 def indexPage(request):
+    dashboard(request)
+
     return redirect('/dashboard_default')
 
 
@@ -309,27 +314,7 @@ def to_do_design(request):
 
 
 @login_required(login_url="/login")
-def to_do_database(request):
-    tasks = Task.objects.all()
 
-    form = TaskForm()
-    if request.method == 'POST':
-        form = TaskForm(request.POST)
-        if form.is_valid():
-            form.save()
-        return redirect('/to_do_database')
-
-    completedTasks = True
-    for t in tasks:
-        if t.complete == False:
-            completedTasks = False
-
-    context = {'tasks': tasks, 'form': form, 'completedTasks': completedTasks,
-               "breadcrumb": {"parent": "Todo", "child": "Todo with database"}}
-    context = {'tasks': tasks, 'form': form, 'completedTasks': completedTasks,
-               "breadcrumb": {"parent": "Todo", "child": "Todo with database"}}
-
-    return render(request, 'to_do_database/to-do-database.html', context)
 
 
 @login_required(login_url="/login")
@@ -2007,7 +1992,7 @@ def reportes(request):
         'min_date': min_date,
         'breadcrumb': {"parent": "Reportes", "child": "Reportes de convenios"}
     }
-    return render(request, 'reportes/reportes.html', context)
+    return render(request, 'dashboard/main_dashboard.html', context)
 
 
 from django.http import HttpResponse
@@ -2083,3 +2068,69 @@ def export_convenios_excel(request):
     workbook.save(response)
 
     return response
+
+# Dashboard
+from django.shortcuts import render
+from datetime import datetime, timedelta
+from .models import Convenio, Empresa, Carreras
+from django.db.models import Count
+from django.db.models.functions import TruncMonth
+from datetime import timedelta
+
+def dashboard(request):
+    today = datetime.now().date()
+    one_month_ago = today - timedelta(days=30)
+    three_months_ago = today - timedelta(days=90)
+    six_months_ago = today - timedelta(days=180)
+    one_year_ago = today - timedelta(days=365)
+
+    # Convenios por estado
+    convenios_activos = Convenio.objects.filter(finVigencia__gte=today).count()
+    convenios_casi_expirados = Convenio.objects.filter(finVigencia__lt=today, finVigencia__gte=one_month_ago).count()
+    convenios_expirados = Convenio.objects.filter(finVigencia__lt=one_month_ago).count()
+
+    # Convenios por fecha de inicio
+    convenios_30_dias = Convenio.objects.filter(inicioVigencia__gte=one_month_ago).count()
+    convenios_3_meses = Convenio.objects.filter(inicioVigencia__gte=three_months_ago).count()
+    convenios_6_meses = Convenio.objects.filter(inicioVigencia__gte=six_months_ago).count()
+    convenios_1_ano = Convenio.objects.filter(inicioVigencia__gte=one_year_ago).count()
+
+    # Convenios por carrera
+    convenios_por_carrera = Carreras.objects.all().annotate(convenios_count=Count('convenio')).order_by(
+        '-convenios_count')[:5].values('nombreCarrera', 'convenios_count')
+
+
+    # Convenios próximos a expirar
+    convenios_proximos_expirar = Convenio.objects.filter(finVigencia__lte=one_month_ago).order_by('finVigencia')
+
+    now = timezone.now()
+    last_year = now - timedelta(days=365)
+
+    convenios_por_mes = (
+        Convenio.objects.filter(inicioVigencia__gte=last_year)
+        .annotate(month=TruncMonth("inicioVigencia"))
+        .values("month")
+        .annotate(convenios_count=Count("numConvenio"))
+        .order_by("month")
+    )
+
+
+
+    # ... Realiza otras consultas y cálculos necesarios ...
+
+    context = {
+        'convenios_activos': convenios_activos,
+        'convenios_casi_expirados': convenios_casi_expirados,
+        'convenios_expirados': convenios_expirados,
+        'convenios_30_dias': convenios_30_dias,
+        'convenios_3_meses': convenios_3_meses,
+        'convenios_6_meses': convenios_6_meses,
+        'convenios_1_ano': convenios_1_ano,
+        'convenios_por_carrera': convenios_por_carrera,
+        'convenios_proximos_expirar': convenios_proximos_expirar,
+        'convenios_por_carrera_json': json.dumps(list(convenios_por_carrera)),
+        'convenios_por_mes_json': json.dumps(list(convenios_por_mes), cls=DjangoJSONEncoder),
+        # ... Pasa otras variables de contexto necesarias ...
+    }
+    print(json.dumps(list(convenios_por_carrera)))
+    return render(request, 'dashboard/main_dashboard.html', context)
