@@ -1,6 +1,6 @@
 
 
-# SGCSur - Sistema de Gestión de Convenios para Universidad Sur
+# SGCSur - Sistema de Gestión de Convenios CUSur
 
 SGCSur es un sistema web desarrollado en Django que tiene como objetivo capturar los convenios vigentes de un campus específico de una universidad. 
 
