@@ -2099,9 +2099,10 @@ def dashboard(request):
     convenios_por_carrera = Carreras.objects.all().annotate(convenios_count=Count('convenio')).order_by(
         '-convenios_count')[:5].values('nombreCarrera', 'convenios_count')
 
-
     # Convenios próximos a expirar
-    convenios_proximos_expirar = Convenio.objects.filter(finVigencia__lte=one_month_ago).order_by('finVigencia')
+    today_plus_30_days = today + timedelta(days=30)
+    convenios_proximos_expirar = Convenio.objects.filter(finVigencia__gte=today,
+                                                         finVigencia__lte=today_plus_30_days).order_by('finVigencia')
 
     now = timezone.now()
     last_year = now - timedelta(days=365)
