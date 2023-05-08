@@ -1992,7 +1992,7 @@ def reportes(request):
         'min_date': min_date,
         'breadcrumb': {"parent": "Reportes", "child": "Reportes de convenios"}
     }
-    return render(request, 'dashboard/main_dashboard.html', context)
+    return render(request, 'reportes/reportes.html', context)
 
 
 from django.http import HttpResponse
