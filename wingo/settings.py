@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-i0jf7n-g!4x$arg3))#2#a-v2fhg-av!7cfg7xcttt^m_!y!%q'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = ['*']
 
@@ -130,9 +130,11 @@ STATICFILES_FINDERS = [
     'sass_processor.finders.CssFinder',
 ]
 
-STATIC_URL = '/wingo/wingoapp/static/'
+STATIC_URL = '/static/'
+#STATIC_URL = '/wingo/wingoapp/static/'
 
-STATIC_ROOT = BASE_DIR / 'wingoapp/static'
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+#STATIC_ROOT = BASE_DIsR / 'wingoapp/static'
 
 SASS_PROCESSOR_ROOT = BASE_DIR / 'static'
 

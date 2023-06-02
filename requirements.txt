@@ -12,3 +12,4 @@ crispy-bootstrap5
 django_crispy_forms
 django-extensions
 openpyxl
+gunicorn
