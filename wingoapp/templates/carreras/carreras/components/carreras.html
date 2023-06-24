@@ -32,7 +32,9 @@
                                     <a class="dropdown-item" href="{% url 'carreras_ver' carrera.idCarrera %}">Ver
                                         detalles</a>
                                     <a class="dropdown-item" href="{% url 'carreras_modificar' carrera.idCarrera %}">Modificar</a>
+                                    {% if request.user.is_staff %}
                                     <a class="dropdown-item" href="{% url 'carreras_eliminar' carrera.idCarrera %}">Eliminar</a>
+                                    {% endif %}
                                 </div>
                             </td>
                         </tr>

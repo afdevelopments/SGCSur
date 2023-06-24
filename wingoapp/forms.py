@@ -1,6 +1,7 @@
 from dataclasses import field
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
+from django.contrib.auth.models import User
 from django.forms import ModelForm, DateInput
 from django.shortcuts import render
 
@@ -15,6 +16,20 @@ class CustomAuthenticationForm(AuthenticationForm):
         widget=forms.TextInput()
     )
     password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
+
+
+# Formulario de crear usuarios.
+class RegistroForm(UserCreationForm):
+    username = UsernameField(
+        label='Usuario',
+        widget=forms.TextInput()
+    )
+    password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
+    password2 = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput)
+    
+    class Meta:
+        model = User
+        fields = ['username', 'password1', 'password2']
 
 
 # Formulario de añadir / modificar carrera
