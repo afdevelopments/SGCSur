@@ -8,8 +8,8 @@
             src="{% static 'assets/images/login/login_bg.jpg' %}" alt="">
           <form class="theme-form login-form" method="post">
             <div class="login-header text-center">
-              <h4>Create your account</h4>
-              <h6>Enter your personal details to create account</h6>
+              <h4>Crear una cuenta</h4>
+              <h6>Ingrese el nombre y contraseña que desea usar.</h6>
             </div>
             {% csrf_token %}
             {{ form }}
@@ -109,9 +109,9 @@
               </div>
             </div> {% endcomment %}
             <div class="form-group">
-              <button class="btn btn-primary btn-block" type="submit">Create Account</button>
+              <button class="btn btn-primary btn-block" type="submit">Crear una cuenta</button>
             </div>
-            <p>Already have an account?<a class="ms-2" href="/login_simple">Sign in</a></p>
+            <p>¿Ya tiene una cuenta?<a class="ms-2" href="/login_simple">Ingresar</a></p>
           </form>
         </div>
       </div>

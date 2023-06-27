@@ -36,7 +36,9 @@
                           <h6 class="dropdown-header">Seleccione la opción</h6>
                       <a class="dropdown-item" href="{% url 'empresas_ver' empresa.idEmpresa %}">Ver detalles</a>
                       <a class="dropdown-item" href="{% url 'empresas_modificar' empresa.idEmpresa%}">Modificar</a>
+                      {% if request.user.is_staff %}
                       <a class="dropdown-item" href="{% url 'empresas_eliminar' empresa.idEmpresa%}">Eliminar</a>
+                      {% endif %}
                         </div></td>
                 </tr>
                 {% endfor %}

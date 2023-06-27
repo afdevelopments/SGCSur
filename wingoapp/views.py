@@ -4,6 +4,7 @@ from django.core.serializers.json import DjangoJSONEncoder
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
+from django.contrib.auth.models import Group
 from django.contrib.auth import login, logout
 from django.http.response import HttpResponseRedirect
 from django.views import generic
@@ -11,6 +12,7 @@ from django.urls import reverse
 from django.db.models import Q
 from .models import *
 from .forms import *
+from .decorators import *
 from django.views.generic import (
     ListView,
     View,
@@ -1170,7 +1172,7 @@ def error_page_4(request):
 
     # authentication
 
-
+@unauthenticated_user
 def login_simple(request):
     if request.method == 'POST':
         form = CustomAuthenticationForm(data=request.POST)
@@ -1181,7 +1183,7 @@ def login_simple(request):
                 nextPage = request.GET['next']
                 return HttpResponseRedirect(nextPage)
             else:
-                return redirect('dashboard_ecommerce')
+                return redirect('index')
     else:
         form = CustomAuthenticationForm()
     context = {"breadcrumb": {"parent": "parent", "child": "child"}, "form": form}
@@ -1218,15 +1220,18 @@ def login_with_sweetalert(request):
     return render(request, 'others/authentication/login-sa-validation/login-sa-validation.html', context)
 
 
+@unauthenticated_user
 def register_simple(request):
     if request.method == 'POST':
-        form = UserCreationForm(request.POST)
+        form = RegistroForm(request.POST)
         if form.is_valid():
             user = form.save()
+            group = Group.objects.get(name='prestadorCaptura')
+            user.groups.add(group)
             login(request, user)
-            return redirect('dashboard_ecommerce')
+            return redirect('index')
     else:
-        form = UserCreationForm()
+        form = RegistroForm()
 
     return render(request, 'others/authentication/sign-up/sign-up.html', {"form": form})
 
@@ -1626,6 +1631,7 @@ def carreras_agregar(request):
 
 
 @login_required(login_url="/login")
+@allowed_users(allowed_roles=['administrador'])
 def carreras_eliminar(request, pk):
     carrera = get_object_or_404(Carreras, idCarrera=pk)
     if request.POST:
@@ -1739,6 +1745,7 @@ def empresas_modificar(request, pk):
 
 
 @login_required(login_url="/login")
+@allowed_users(allowed_roles=['administrador'])
 def empresas_eliminar(request, pk):
     empresa = get_object_or_404(Empresa, idEmpresa=pk)
     if request.POST:
@@ -1817,6 +1824,7 @@ def contactos_modificar(request, pk):
 
 # Contactos eliminar.
 @login_required(login_url="/login")
+@allowed_users(allowed_roles=['administrador'])
 def contactos_eliminar(request, pk):
     contacto = get_object_or_404(Contacto, idContacto=pk)
     if request.POST:
@@ -1901,6 +1909,7 @@ def convenios_modificar(request, pk):
 
 # Convenios Eliminar
 @login_required(login_url="/login")
+@allowed_users(allowed_roles=['administrador'])
 def convenios_eliminar(request, pk):
     convenio = get_object_or_404(Convenio, numConvenio=pk)
     if request.POST:
@@ -1934,6 +1943,7 @@ from django.db.models import QuerySet
 
 # Módulo de reportes
 # views.py
+@login_required(login_url="/login")
 def reportes(request):
     lista_convenios = Convenio.objects.all().order_by('-inicioVigencia')
     empresas = Empresa.objects.filter(convenio__isnull=False).distinct()
@@ -2001,6 +2011,7 @@ from openpyxl.utils import get_column_letter
 from openpyxl.styles import PatternFill
 from datetime import datetime
 
+@login_required(login_url="/login")
 def export_convenios_excel(request):
     convenios = Convenio.objects.all().order_by('-inicioVigencia')
 
@@ -2077,6 +2088,7 @@ from django.db.models import Count
 from django.db.models.functions import TruncMonth
 from datetime import timedelta
 
+@login_required(login_url="/login")
 def dashboard(request):
     today = datetime.now().date()
     one_month_ago = today - timedelta(days=30)
