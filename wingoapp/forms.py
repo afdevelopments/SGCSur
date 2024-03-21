@@ -1,32 +1,27 @@
 from dataclasses import field
+from datetime import datetime
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm, UsernameField, UserCreationForm
 from django.contrib.auth.models import User
 from django.forms import ModelForm, DateInput
 from django.shortcuts import render
+from django.core.exceptions import ValidationError
 
-from .models import *
-from django.contrib.auth.forms import AuthenticationForm, UsernameField
+from .models import Carreras, Empresa, Contacto, Convenio
 
 
 # Para cambiar el label del usuario y contraseña
 class CustomAuthenticationForm(AuthenticationForm):
-    username = UsernameField(
-        label='Usuario',
-        widget=forms.TextInput()
-    )
-    password = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
+    username = UsernameField(label='Usuario', widget=forms.TextInput())
+    password = forms.CharField(label="Contraseña", widget=forms.PasswordInput())
 
 
 # Formulario de crear usuarios.
 class RegistroForm(UserCreationForm):
-    username = UsernameField(
-        label='Usuario',
-        widget=forms.TextInput()
-    )
+    username = UsernameField(label='Usuario', widget=forms.TextInput())
     password1 = forms.CharField(label="Contraseña", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirmar contraseña", widget=forms.PasswordInput)
-    
+
     class Meta:
         model = User
         fields = ['username', 'password1', 'password2']
@@ -40,10 +35,8 @@ class CarreraForm(ModelForm):
         ("Ciencias Exactas, Naturales y Tecnológicas", "Ciencias Exactas, Naturales y Tecnológicas"),
         ("Ciencias de la Salud", "Ciencias de la Salud"),
     ]
-    divisionCarrera = forms.CharField(max_length=100, label="División de la carrera",
-                                      widget=forms.Select(choices=divisionesMenu))
+    divisionCarrera = forms.CharField(max_length=100, label="División de la carrera", widget=forms.Select(choices=divisionesMenu))
 
-    # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Carreras
         fields = ['nombreCarrera', 'divisionCarrera']
@@ -55,9 +48,7 @@ class EmpresaForm(ModelForm):
     nombre = forms.CharField(max_length=200, label="Nombre conocido de la empresa", required=False)
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
     giro = forms.CharField(max_length=50, label="Giro de la empresa")
-    pais = forms.CharField(label="Pais", widget=forms.widgets.Select(attrs={
-        'onchange': "print_state('state',this.selectedIndex);", 'id': 'country', 'name': 'country'
-    }))
+    pais = forms.CharField(label="Pais", widget=forms.widgets.Select(attrs={'onchange': "print_state('state',this.selectedIndex);", 'id': 'country', 'name': 'country'}))
     estado = forms.CharField(label="Estado", widget=forms.widgets.Select(attrs={'name': 'state', 'id': 'state'}))
     ciudad = forms.CharField(max_length=200, label="Ciudad")
     colonia = forms.CharField(max_length=200, label="Colonia")
@@ -71,14 +62,11 @@ class EmpresaForm(ModelForm):
         ("Social", "Social"),
         ("Educativo", "Educativo"),
     ]
-    sectorEmpresa = forms.CharField(max_length=100, label="Sector de la empresa",
-                                    widget=forms.Select(choices=sectoresMenu))
+    sectorEmpresa = forms.CharField(max_length=100, label="Sector de la empresa", widget=forms.Select(choices=sectoresMenu))
 
-    # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Empresa
-        fields = ['razonSocial', 'nombre', 'rfc', 'giro', 'pais', 'estado', 'ciudad', 'colonia', 'calle', 'numero',
-                  'numeroInterior', 'cp', 'sectorEmpresa']
+        fields = ['razonSocial', 'nombre', 'rfc', 'giro', 'pais', 'estado', 'ciudad', 'colonia', 'calle', 'numero', 'numeroInterior', 'cp', 'sectorEmpresa']
 
 
 # Formulario de añadir / modificar contacto
@@ -88,12 +76,12 @@ class ContactoForm(ModelForm):
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
     email = forms.EmailField(max_length=254, label="Correo electrónico")
 
-    # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Contacto
         fields = ['nombre', 'numTelefono', 'idEmpresa', 'email']
 
 
+# Formulario de convenio
 class ConvenioForm(ModelForm):
     idCarrera = forms.ModelChoiceField(queryset=Carreras.objects.all(), label="Carrera")
     inicioVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente desde")
@@ -101,7 +89,6 @@ class ConvenioForm(ModelForm):
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
     observaciones = forms.CharField(widget=forms.Textarea, label="Observaciones", required=False)
 
-    # Class Meta para definir el modelo y los campos que se van a mostrar
     class Meta:
         model = Convenio
         fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa', 'observaciones']
@@ -112,15 +99,6 @@ class ConvenioForm(ModelForm):
 
 
 # Formulario para filtrado de reportes:
-
-from datetime import datetime
-
-
-from django import forms
-from django.core.exceptions import ValidationError
-from datetime import datetime
-
-# forms.py
 class ReporteConveniosForm(forms.Form):
     idCarrera = forms.ModelMultipleChoiceField(queryset=Carreras.objects.all(), required=False)
     idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)

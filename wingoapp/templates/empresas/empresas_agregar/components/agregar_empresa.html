@@ -336,7 +336,7 @@
             <script language="javascript">print_country("country");</script>
             <button class="btn crispy_forms btn-primary" type="submit">Añadir</button>
             <!--Validaciones-->
-            <p id="carrera-form-errors" style="color: red"></p>
+            <p id="empresa-form-errors" style="color: red"></p>
             <script>
                 $(document).ready(function() {
                     $('#empresa-form').on('submit', function (event){
@@ -406,7 +406,7 @@
                             errors.push("El sector de la empresa debe estar entre las opciones")
                         }
                         if (errors.length > 0) {
-                            $('#carrera-form-errors').html(errors.join('<br>'));
+                            $('#empresa-form-errors').html(errors.join('<br>'));
                             return;
                         }
                         // Enviar el formulario si los campos son válidos
