@@ -1,43 +1,41 @@
+# SGCSur - Convention Management System CUSur
 
+SGCSur is a web system developed in Django aimed at capturing existing agreements of the Southern University Center of the University of Guadalajara.
 
-# SGCSur - Sistema de Gestión de Convenios CUSur
+## System Modules
 
-SGCSur es un sistema web desarrollado en Django que tiene como objetivo capturar los convenios existentes del Centro Universitario del Sur de la Universidad de Guadalajara
+The system is divided into the following modules:
 
-## Módulos del sistema
+### Companies
 
-El sistema está dividido en los siguientes módulos:
+In this module, companies with which agreements are made can be registered.
 
-### Empresas
+### Programs
 
-En este módulo se pueden registrar las empresas con las que se elaboran los convenios.
+In this module, the programs offered on the campus can be registered.
 
-### Carreras
+### Contacts
 
-En este módulo se pueden registrar las carreras que se ofertan en el campus.
+This module registers the contact information of the companies.
 
-### Contactos
+### Agreements
 
-En este módulo se registra la información de contacto de las empresas
+In this module, the agreements made with companies can be registered. Each agreement has a name, a description, its start date, its expiration date, and certain notes that may be relevant.
 
-### Convenios
+### Reports
 
-En este módulo se pueden registrar los convenios celebrados con las empresas. Cada convenio tiene un nombre, una descripción, su fecha de inicio de vigencia, su fecha de vencimiento y ciertas anotaciones que puedan resultar relevantes.
-
-### Reportes
-
-En este módulo se pueden generar reportes estadísticos acerca de la información registrada en el sistema. Los reportes pueden ser filtrados por carrera, empresa o fecha de celebración del convenio.
+In this module, statistical reports about the information registered in the system can be generated. Reports can be filtered by program, company, or agreement date.
 
 ## Dashboard
 
-El sistema cuenta con un dashboard en la página principal que permite ver información general de manera rápida. En el dashboard se pueden ver los convenios que están próximos a vencer, los convenios que ya vencieron y los convenios que se celebraron recientemente.
+The system has a dashboard on the main page that allows for a quick overview of general information. The dashboard shows agreements that are about to expire, agreements that have already expired, and agreements that have been recently made.
 
-## Instalación
+## Installation
 
-1. Clona el repositorio en tu máquina local.
-2. Crea un entorno virtual para el proyecto: `python -m venv env`
-3. Activa el entorno virtual: `source env/bin/activate`
-4. Instala los requerimientos del proyecto: `pip install -r requirements.txt`
-5. Realiza las migraciones de la base de datos: `python manage.py migrate`
-6. Crea un usuario administrador: `python manage.py createsuperuser`
-7. Ejecuta el servidor: `python manage.py runserver`
+1. Clone the repository to your local machine.
+2. Create a virtual environment for the project: `python -m venv env`
+3. Activate the virtual environment: `source env/bin/activate`
+4. Install the project requirements: `pip install -r requirements.txt`
+5. Perform the database migrations: `python manage.py migrate`
+6. Create an admin user: `python manage.py createsuperuser`
+7. Run the server: `python manage.py runserver`
