@@ -19,6 +19,7 @@ from django.views.generic import (
     CreateView,
     UpdateView, TemplateView
 )
+from .utils import filter_convenios
 
 
 # dashboard pages
@@ -1945,53 +1946,17 @@ from django.db.models import QuerySet
 # views.py
 @login_required(login_url="/login")
 def reportes(request):
-    lista_convenios = Convenio.objects.all().order_by('-inicioVigencia')
     empresas = Empresa.objects.filter(convenio__isnull=False).distinct()
     carreras = Carreras.objects.filter(convenio__isnull=False).distinct()
-    error_message = None
     earliest_convenio = Convenio.objects.order_by('inicioVigencia').first()
     min_date = earliest_convenio.inicioVigencia if earliest_convenio else None
 
-    form = ReporteConveniosForm(request.GET, initial={'fecha_inicio': min_date})
-
-    if request.method == "GET" and form.is_valid():
-        cleaned_data = form.cleaned_data
-        idCarrera = cleaned_data['idCarrera']
-        idEmpresa = cleaned_data['idEmpresa']
-        fecha_inicio = cleaned_data['fecha_inicio']
-        fecha_vigencia = cleaned_data['fecha_vigencia']
-        estado = cleaned_data['estado']
-        print("Fecha de vigencia:", fecha_vigencia)
-
-        q_objects = Q()
-
-        if idCarrera:
-            q_objects &= reduce(or_, [Q(idCarrera=carrera) for carrera in idCarrera])
-
-        if idEmpresa:
-            q_objects &= reduce(or_, [Q(idEmpresa=empresa) for empresa in idEmpresa])
-
-        if fecha_inicio:
-            q_objects &= Q(inicioVigencia__gte=fecha_inicio)
-
-        if fecha_vigencia is not None and fecha_vigencia != 'Todas las fechas':
-            rango_fechas = fecha_vigencia.split(' - ')
-            if len(rango_fechas) == 2:
-                fecha_inicio_vigencia = datetime.strptime(rango_fechas[0], '%Y-%m-%d')
-                fecha_fin_vigencia = datetime.strptime(rango_fechas[1], '%Y-%m-%d')
-                q_objects &= (Q(inicioVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia)) |
-                              Q(finVigencia__range=(fecha_inicio_vigencia, fecha_fin_vigencia)))
-            else:
-                error_message = "El formato de fecha debe ser 'DD/MM/YYYY - DD/MM/YYYY'."
-
-        if estado == 'activo':
-            q_objects &= Q(inicioVigencia__lte=timezone.now().date(), finVigencia__gte=timezone.now().date())
-        elif estado == 'casi_expirado':
-            q_objects &= Q(finVigencia__gt=timezone.now().date(),
-                           finVigencia__lte=timezone.now().date() + timedelta(days=30))
-        elif estado == 'expirado':
-            q_objects &= Q(finVigencia__lt=timezone.now().date())
-        lista_convenios = lista_convenios.filter(q_objects)
+    # Use the utility function for filtering logic
+    lista_convenios, form, error_message = filter_convenios(request.GET)
+    
+    # If no GET params (initial load), we might want to set initial form key like origin
+    if not request.GET:
+        form = ReporteConveniosForm(initial={'fecha_inicio': min_date})
 
     context = {
         'form': form,
@@ -2013,7 +1978,8 @@ from datetime import datetime
 
 @login_required(login_url="/login")
 def export_convenios_excel(request):
-    convenios = Convenio.objects.all().order_by('-inicioVigencia')
+    # Use the utility function to apply the SAME filters as the dashboard
+    convenios, _, _ = filter_convenios(request.GET)
 
     # Crear el archivo de Excel y agregar una hoja de trabajo
     workbook = Workbook()
