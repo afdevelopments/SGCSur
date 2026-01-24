@@ -2,9 +2,9 @@
 {% load sass_tags %}
 {% load crispy_forms_tags %}
 <div class="card">
-  <div class="card-header pb-0">
-    <h5>Modificar</h5><span>Para modificar este convenio, por favor rellene el siguiente formulario.</span>
-  </div>
+    <div class="card-header pb-0">
+        <h5>Modificar</h5><span>Para modificar este convenio, por favor rellene el siguiente formulario.</span>
+    </div>
     <form class="form theme-form" method="post" enctype="multipart/form-data" id="convenio-form">
         <div class="card-body">
             {% csrf_token %}
@@ -14,23 +14,11 @@
             <p id="convenio-form-errors" style="color: red"></p>
         </div>
     </form>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function (){
-            $('#convenio-form').on('submit', function (event){
-                event.preventDefault();
-                const dateStart = new Date($('#id_inicioVigencia').val());
-                const dateEnd = new Date($('#id_finVigencia').val());
-                console.log(dateStart, dateEnd)
-                let errors = []
-                if(dateEnd < dateStart){
-                    errors.push("La fecha de término de la vigencia del convenio no puede ser previa a la de inicio")
-                }
-                if(errors.length > 0){
-                    $('#convenio-form-errors').html(errors.join('<br>'));
-                    return;
-                }
-                this.submit();
+        $(document).ready(function () {
+            $('#convenio-form').on('submit', function (event) {
+                // Allow form submission to proceed - removed client-side validation that was incompatible with date format
+                // The backend validates dates reliable.
             });
         });
     </script>

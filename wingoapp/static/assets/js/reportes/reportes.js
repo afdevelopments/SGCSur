@@ -9,14 +9,16 @@ $(document).ready(function () {
     });
 
     // Inicializa Date Range Picker
-    const minDate = $('#id_fecha_inicio').data('mindate') || moment().format('YYYY-MM-DD');
+    let minDateRaw = $('#id_fecha_inicio').data('mindate');
+    let minDate = minDateRaw ? moment(minDateRaw, 'DD/MM/YYYY') : moment();
+
     $('#id_fecha_inicio').daterangepicker({
         singleDatePicker: true,
         showDropdowns: true,
         startDate: minDate,
         minDate: minDate,
         locale: {
-            format: 'YYYY-MM-DD',
+            format: 'DD/MM/YYYY',
             cancelLabel: 'Limpiar',
             applyLabel: 'Aplicar'
         }
