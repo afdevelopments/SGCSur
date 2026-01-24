@@ -65,7 +65,7 @@
             <div class="row mt-3">
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-primary me-2">Filtrar</button>
-                    <a href="{% url 'export_convenios_excel' %}" class="btn btn-success">Descargar Excel</a>
+                    <button type="submit" formaction="{% url 'export_convenios_excel' %}" class="btn btn-success">Descargar Excel</button>
                 </div>
             </div>
 
