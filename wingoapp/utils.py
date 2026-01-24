@@ -3,7 +3,7 @@ from operator import or_
 from datetime import datetime, timedelta
 from django.db.models import Q
 from django.utils import timezone
-from .models import Convenio
+from .models import Convenio, Empresa
 from .forms import ReporteConveniosForm
 
 def filter_convenios(query_params):
@@ -26,6 +26,7 @@ def filter_convenios(query_params):
         fecha_inicio = cleaned_data.get('fecha_inicio')
         fecha_vigencia = cleaned_data.get('fecha_vigencia')
         estado = cleaned_data.get('estado')
+        sectores = cleaned_data.get('sectores')
 
         q_objects = Q()
 
@@ -34,6 +35,9 @@ def filter_convenios(query_params):
 
         if idEmpresa:
             q_objects &= reduce(or_, [Q(idEmpresa=empresa) for empresa in idEmpresa])
+
+        if sectores:
+            q_objects &= Q(idEmpresa__sectorEmpresa__in=sectores)
 
         if fecha_inicio:
             q_objects &= Q(inicioVigencia__gte=fecha_inicio)
@@ -68,3 +72,50 @@ def filter_convenios(query_params):
         pass
 
     return lista_convenios, form, error_message
+
+def filter_contactos(query_params):
+    """
+    Filters Contacto objects based on query parameters.
+    Returns the filtered QuerySet and the form.
+    """
+    from .models import Contacto
+    from .forms import ReporteContactosForm
+
+    lista_contactos = Contacto.objects.all().order_by('nombre')
+    form = ReporteContactosForm(query_params)
+
+    if form.is_valid():
+        cleaned_data = form.cleaned_data
+        idEmpresa = cleaned_data.get('idEmpresa')
+        estado_convenio = cleaned_data.get('estado_convenio')
+
+        q_objects = Q()
+
+        if idEmpresa:
+            q_objects &= Q(idEmpresa__in=idEmpresa)
+
+        if estado_convenio:
+            today = timezone.now().date()
+            if estado_convenio == 'activo':
+                companies_with_state = Convenio.objects.filter(
+                    inicioVigencia__lte=today, finVigencia__gte=today
+                ).values_list('idEmpresa', flat=True)
+            elif estado_convenio == 'casi_expirado':
+                companies_with_state = Convenio.objects.filter(
+                    finVigencia__gt=today,
+                    finVigencia__lte=today + timedelta(days=30)
+                ).values_list('idEmpresa', flat=True)
+            elif estado_convenio == 'expirado':
+                companies_with_state = Convenio.objects.filter(
+                    finVigencia__lt=today
+                ).values_list('idEmpresa', flat=True)
+            elif estado_convenio == 'sin_convenio':
+                 companies_with_state = Empresa.objects.filter(convenio__isnull=True).values_list('idEmpresa', flat=True)
+            else:
+                companies_with_state = []
+            
+            q_objects &= Q(idEmpresa__in=companies_with_state)
+
+        lista_contactos = lista_contactos.filter(q_objects)
+    
+    return lista_contactos, form

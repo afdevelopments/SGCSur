@@ -7,9 +7,9 @@
     </div>
     <div class="card-body">
         {% if error_message %}
-            <div class="alert alert-danger" role="alert">
-                {{ error_message }}
-            </div>
+        <div class="alert alert-danger" role="alert">
+            {{ error_message }}
+        </div>
         {% endif %}
         <form method="GET" action="" class="theme-form">
             {% csrf_token %}
@@ -17,11 +17,11 @@
                 <div class="col-md-4">
                     <label for="idEmpresa">Empresa</label>
                     <select class="js-example-placeholder-multiple col-sm-12" id="idEmpresa" name="idEmpresa"
-                            data-placeholder="Seleccione una empresa" multiple>
+                        data-placeholder="Seleccione una empresa" multiple>
                         <!-- Cambios en el campo de selección de empresa -->
                         {% for empresa in empresas %}
-                            <option value="{{ empresa.idEmpresa }}">
-                                ({{ empresa.idEmpresa }}) {{ empresa.razonSocial }}</option>
+                        <option value="{{ empresa.idEmpresa }}">
+                            ({{ empresa.idEmpresa }}) {{ empresa.razonSocial }}</option>
                         {% endfor %}
 
                     </select>
@@ -29,10 +29,10 @@
                 <div class="col-md-4">
                     <label for="idCarrera">Carrera</label>
                     <select class="js-example-placeholder-multiple col-sm-12" id="idCarrera" name="idCarrera"
-                            data-placeholder="Seleccione una carrera" multiple>
+                        data-placeholder="Seleccione una carrera" multiple>
                         {% for carrera in carreras %}
-                            <option value="{{ carrera.idCarrera }}">
-                                ({{ carrera.idCarrera }}) {{ carrera.nombreCarrera }}</option>
+                        <option value="{{ carrera.idCarrera }}">
+                            ({{ carrera.idCarrera }}) {{ carrera.nombreCarrera }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -41,7 +41,7 @@
                 <div class="col-md-4">
                     <label class="col-form-label pt-0" for="id_fecha_inicio">Fecha de Inicio</label>
                     <input type="text" name="fecha_inicio" id="id_fecha_inicio"
-                           data-mindate="{{ min_date|date:'Y-m-d' }}" class="form-control">
+                        data-mindate="{{ min_date|date:'Y-m-d' }}" class="form-control">
 
                 </div>
             </div>
@@ -49,7 +49,16 @@
                 <div class="col-md-4">
                     <label class="col-form-label pt-0" for="id_fecha_vigencia">Rango de Fechas de Vigencia</label>
                     <input type="text" class="form-control" id="id_fecha_vigencia" name="fecha_vigencia"
-                           data-bs-toggle="daterangepicker">
+                        data-bs-toggle="daterangepicker">
+                </div>
+                <div class="col-md-4">
+                    <label for="id_sectores">Sector</label>
+                    <select class="js-example-placeholder-multiple col-sm-12" id="id_sectores" name="sectores"
+                        data-placeholder="Seleccione sectores" multiple>
+                        {% for code, name in form.fields.sectores.choices %}
+                        <option value="{{ code }}">{{ name }}</option>
+                        {% endfor %}
+                    </select>
                 </div>
                 <div class="col-md-4">
                     <label for="id_estado">Estado de convenio</label>
@@ -60,20 +69,31 @@
                         <option value="expirado">Expirado</option>
                     </select>
                 </div>
+                <!-- Checkbox para incluir contactos -->
+                <div class="col-md-12 mt-3">
+                    <div class="form-check">
+                        <input class="form-check-input" type="checkbox" id="id_incluir_contactos"
+                            name="incluir_contactos">
+                        <label class="form-check-label" for="id_incluir_contactos">
+                            Incluir información de contacto de la empresa
+                        </label>
+                    </div>
+                </div>
             </div>
 
             <div class="row mt-3">
                 <div class="col-md-12 text-center">
                     <button type="submit" class="btn btn-primary me-2">Filtrar</button>
-                    <button type="submit" formaction="{% url 'export_convenios_excel' %}" class="btn btn-success">Descargar Excel</button>
+                    <button type="submit" formaction="{% url 'export_convenios_excel' %}"
+                        class="btn btn-success">Descargar Excel</button>
                 </div>
             </div>
 
         </form>
         {% if lista_convenios %}
-            <div class="table-primary">
-                <table class="display" id="basic-2">
-                    <thead>
+        <div class="table-primary">
+            <table class="display" id="basic-2">
+                <thead>
                     <tr>
                         <th>Número de convenio</th>
                         <th>Estado</th>
@@ -83,36 +103,36 @@
                         <th>Empresa</th>
                         <th>Observaciones</th>
                     </tr>
-                    </thead>
-                    <tbody>
+                </thead>
+                <tbody>
                     {% for convenio in lista_convenios %}
-                        <tr {% if convenio.activo %}class="activo"{% elif convenio.casiExpirado %}class="casi-expirado"
-                            {% else %}class="expirado"{% endif %}>
-                            <td>{{ convenio.numConvenio }}</td>
-                            <td>
-                                {% if convenio.estado == "Activo" %}
-                                    <span class="badge badge-success">Activo</span>
-                                {% elif convenio.estado == "Casi expirado" %}
-                                    <span class="badge badge-warning text-dark">Casi expirado</span>
-                                {% else %}
-                                    <span class="badge badge-danger">Expirado</span>
-                                {% endif %}
-                            </td>
-                            <td>{{ convenio.idCarrera.nombreCarrera }}</td>
-                            <td>{{ convenio.inicioVigencia }}</td>
-                            <td>{{ convenio.finVigencia }}</td>
-                            <td>{{ convenio.idEmpresa.razonSocial }}</td>
-                            <td>{{ convenio.observaciones }}</td>
-                        </tr>
+                    <tr {% if convenio.activo %}class="activo" {% elif convenio.casiExpirado %}class="casi-expirado" {%
+                        else %}class="expirado" {% endif %}>
+                        <td>{{ convenio.numConvenio }}</td>
+                        <td>
+                            {% if convenio.estado == "Activo" %}
+                            <span class="badge badge-success">Activo</span>
+                            {% elif convenio.estado == "Casi expirado" %}
+                            <span class="badge badge-warning text-dark">Casi expirado</span>
+                            {% else %}
+                            <span class="badge badge-danger">Expirado</span>
+                            {% endif %}
+                        </td>
+                        <td>{{ convenio.idCarrera.nombreCarrera }}</td>
+                        <td>{{ convenio.inicioVigencia }}</td>
+                        <td>{{ convenio.finVigencia }}</td>
+                        <td>{{ convenio.idEmpresa.razonSocial }}</td>
+                        <td>{{ convenio.observaciones }}</td>
+                    </tr>
                     {% endfor %}
-                </table>
-            </div>
+            </table>
+        </div>
         {% else %}
-            <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
-                <p><b> ¡Sin registros! </b>No existen registros de convenios.</p>
-                <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span
-                        class="bg-warning" aria-hidden="true">dismiss</span></button>
-            </div>
+        <div class="alert alert-warning inverse alert-dismissible fade show" role="alert"><i class="icon-bell"></i>
+            <p><b> ¡Sin registros! </b>No existen registros de convenios.</p>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span class="bg-warning"
+                    aria-hidden="true">dismiss</span></button>
+        </div>
         {% endif %}
     </div>
 </div>
