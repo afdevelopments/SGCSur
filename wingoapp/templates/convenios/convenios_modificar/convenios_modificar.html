@@ -1,9 +1,12 @@
 {% extends 'base.html' %}{% load static %}
 {% load sass_tags %}
+{% block css %}
+<link rel="stylesheet" type="text/css" href="{% sass_src 'assets/scss/vendors/daterange-picker.scss' %}">
+{% endblock css %}
 {% block content %}
 <div class="page-body">
-{% include 'layout/breadcrumb.html' %}
-{% csrf_token %}
+  {% include 'layout/breadcrumb.html' %}
+  {% csrf_token %}
   <!-- Container-fluid starts-->
   <div class="container-fluid">
     <div class="row">
@@ -19,4 +22,19 @@
 <!-- Plugins JS start-->
 <script src="{% static 'assets/js/form-validation-custom.js' %}"></script>
 <!-- Plugins JS Ends-->
+<script src="{% static 'assets/js/datepicker/daterange-picker/moment.min.js' %}"></script>
+<script src="{% static 'assets/js/datepicker/daterange-picker/daterangepicker.js' %}"></script>
+<script>
+  $(document).ready(function () {
+    $('#id_inicioVigencia, #id_finVigencia').daterangepicker({
+      singleDatePicker: true,
+      showDropdowns: true,
+      locale: {
+        format: 'DD/MM/YYYY',
+        cancelLabel: 'Limpiar',
+        applyLabel: 'Aplicar'
+      }
+    });
+  });
+</script>
 {% endblock scriptcontent %}

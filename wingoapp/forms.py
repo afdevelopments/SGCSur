@@ -115,8 +115,8 @@ class ContactoForm(UpperCaseMixin, ModelForm):
 # Formulario de convenio
 class ConvenioForm(UpperCaseMixin, ModelForm):
     idCarrera = forms.ModelChoiceField(queryset=Carreras.objects.all(), label="Carrera")
-    inicioVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente desde")
-    finVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente hasta")
+    inicioVigencia = forms.DateField(label="Vigente desde")
+    finVigencia = forms.DateField(label="Vigente hasta")
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
     observaciones = forms.CharField(widget=forms.Textarea, label="Observaciones", required=False)
 
@@ -124,8 +124,8 @@ class ConvenioForm(UpperCaseMixin, ModelForm):
         model = Convenio
         fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa', 'observaciones']
         widgets = {
-            'inicioVigencia': DateInput(),
-            'finVigencia': DateInput(),
+            'inicioVigencia': DateInput(format='%d/%m/%Y', attrs={'class': 'datepicker'}),
+            'finVigencia': DateInput(format='%d/%m/%Y', attrs={'class': 'datepicker'}),
         }
     
     uppercase_exempt_fields = ['observaciones']
@@ -135,7 +135,7 @@ class ConvenioForm(UpperCaseMixin, ModelForm):
 class ReporteConveniosForm(UpperCaseMixin, forms.Form):
     idCarrera = forms.ModelMultipleChoiceField(queryset=Carreras.objects.all(), required=False)
     idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)
-    fecha_inicio = forms.DateField(required=False, input_formats=["%Y-%m-%d"])
+    fecha_inicio = forms.DateField(required=False)
     fecha_vigencia = forms.CharField(required=False)
     estado = forms.ChoiceField(
         choices=[('activo', 'Activo'), ('casi_expirado', 'Casi expirado'), ('expirado', 'Expirado')],
