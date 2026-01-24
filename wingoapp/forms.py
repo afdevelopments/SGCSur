@@ -10,6 +10,35 @@ from django.core.exceptions import ValidationError
 from .models import Carreras, Empresa, Contacto, Convenio
 
 
+class UpperCaseMixin:
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        exempt_fields = getattr(self, 'uppercase_exempt_fields', [])
+        lowercase_fields = getattr(self, 'lowercase_fields', [])
+        
+        for field_name, field in self.fields.items():
+            if field_name in exempt_fields or field_name in lowercase_fields:
+                continue
+            if isinstance(field.widget, (forms.TextInput, forms.Textarea)):
+                field.widget.attrs.update({'style': 'text-transform: uppercase;'})
+
+    def clean(self):
+        cleaned_data = super().clean()
+        if not cleaned_data:
+            return cleaned_data
+        
+        exempt_fields = getattr(self, 'uppercase_exempt_fields', [])
+        lowercase_fields = getattr(self, 'lowercase_fields', [])
+            
+        for name, value in cleaned_data.items():
+            if isinstance(value, str):
+                if name in lowercase_fields:
+                    cleaned_data[name] = value.lower()
+                elif name not in exempt_fields:
+                    cleaned_data[name] = value.upper()
+        return cleaned_data
+
+
 # Para cambiar el label del usuario y contraseña
 class CustomAuthenticationForm(AuthenticationForm):
     username = UsernameField(label='Usuario', widget=forms.TextInput())
@@ -28,7 +57,7 @@ class RegistroForm(UserCreationForm):
 
 
 # Formulario de añadir / modificar carrera
-class CarreraForm(ModelForm):
+class CarreraForm(UpperCaseMixin, ModelForm):
     nombreCarrera = forms.CharField(max_length=50, label="Nombre de la carrera")
     divisionesMenu = [
         ("Ciencias Sociales y Humanidades", "Ciencias Sociales y Humanidades"),
@@ -43,7 +72,7 @@ class CarreraForm(ModelForm):
 
 
 # Formulario de añadir / modificar empresa
-class EmpresaForm(ModelForm):
+class EmpresaForm(UpperCaseMixin, ModelForm):
     razonSocial = forms.CharField(max_length=200, label="Razón social de la empresa (Nombre legal)")
     nombre = forms.CharField(max_length=200, label="Nombre conocido de la empresa", required=False)
     rfc = forms.CharField(max_length=13, label="RFC de la empresa")
@@ -70,7 +99,7 @@ class EmpresaForm(ModelForm):
 
 
 # Formulario de añadir / modificar contacto
-class ContactoForm(ModelForm):
+class ContactoForm(UpperCaseMixin, ModelForm):
     nombre = forms.CharField(max_length=50, label="Nombre del contacto")
     numTelefono = forms.CharField(max_length=15, label="Número de teléfono")
     idEmpresa = forms.ModelChoiceField(queryset=Empresa.objects.all(), label="Empresa")
@@ -79,10 +108,12 @@ class ContactoForm(ModelForm):
     class Meta:
         model = Contacto
         fields = ['nombre', 'numTelefono', 'idEmpresa', 'email']
+    
+    lowercase_fields = ['email']
 
 
 # Formulario de convenio
-class ConvenioForm(ModelForm):
+class ConvenioForm(UpperCaseMixin, ModelForm):
     idCarrera = forms.ModelChoiceField(queryset=Carreras.objects.all(), label="Carrera")
     inicioVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente desde")
     finVigencia = forms.DateField(widget=forms.DateInput(attrs=dict(type='date')), label="Vigente hasta")
@@ -92,6 +123,8 @@ class ConvenioForm(ModelForm):
     class Meta:
         model = Convenio
         fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa', 'observaciones']
+    
+    uppercase_exempt_fields = ['observaciones']
         widgets = {
             'inicioVigencia': DateInput(),
             'finVigencia': DateInput(),
@@ -99,7 +132,7 @@ class ConvenioForm(ModelForm):
 
 
 # Formulario para filtrado de reportes:
-class ReporteConveniosForm(forms.Form):
+class ReporteConveniosForm(UpperCaseMixin, forms.Form):
     idCarrera = forms.ModelMultipleChoiceField(queryset=Carreras.objects.all(), required=False)
     idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)
     fecha_inicio = forms.DateField(required=False, input_formats=["%Y-%m-%d"])
@@ -125,7 +158,7 @@ class ReporteConveniosForm(forms.Form):
             raise forms.ValidationError("El formato de fecha debe ser 'DD/MM/YYYY - DD/MM/YYYY'.")
 
 
-class ReporteContactosForm(forms.Form):
+class ReporteContactosForm(UpperCaseMixin, forms.Form):
     idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)
     estado_convenio = forms.ChoiceField(
         choices=[('activo', 'Activo'), ('casi_expirado', 'Casi expirado'), ('expirado', 'Expirado'), ('sin_convenio', 'Sin convenio')],
