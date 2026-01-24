@@ -18,8 +18,8 @@
     <script>
         $(document).ready(function () {
             $('#convenio-form').on('submit', function (event) {
-                // Allow form submission to proceed - removed client-side validation that was incompatible with date format
-                // The backend handles validation reliable.
+                // Disable submit button to prevent double submission
+                $(this).find('button[type="submit"]').prop('disabled', true);
             });
         });
     </script>

@@ -2,11 +2,11 @@
 {% load sass_tags %}
 {% load crispy_forms_tags %}
 <div class="card">
-  <div class="card-header pb-0">
-    <h5>Añadir</h5><span>Para agregar un contacto, por favor rellene el siguiente formulario.</span>
-  </div>
+    <div class="card-header pb-0">
+        <h5>Añadir</h5><span>Para agregar un contacto, por favor rellene el siguiente formulario.</span>
+    </div>
     <form class="form theme-form" method="post" action="{% url 'contactos_agregar' %}" enctype="multipart/form-data"
-    id="contacto-form">
+        id="contacto-form">
         <div class="card-body">
             {% csrf_token %}
             {{ form|crispy }}
@@ -29,16 +29,18 @@
                 const numReg = /(\+\d{2,3}){0,1}( {1}|-{1}){0,1}(\d{10})/;
                 let errors = []
                 //Meter los errores en el arreglo
-                if(!nombreReg.test(nombre)){
+                if (!nombreReg.test(nombre)) {
                     errors.push("El nombre solo puede contener letras y debe de ser menor a 60 caracteres")
                 }
-                if (!numReg.test(num)){
+                if (!numReg.test(num)) {
                     errors.push("El número de teléfono debe estar en el formato +xx xxxxxxxxxx, +xx-xxxxxxxxxx o xxxxxxxxxx")
                 }
-                if (errors.length > 0){
+                if (errors.length > 0) {
                     $('#contacto-form-errors').html(errors.join('<br>'));
                     return;
                 }
+                // Disable submit button to prevent double submission
+                $(this).find('button[type="submit"]').prop('disabled', true);
                 // Enviar el formulario si los campos son válidos
                 this.submit();
             });

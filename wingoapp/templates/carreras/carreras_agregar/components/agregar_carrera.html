@@ -2,10 +2,11 @@
 {% load sass_tags %}
 {% load crispy_forms_tags %}
 <div class="card">
-  <div class="card-header pb-0">
-    <h5>Añadir</h5><span>Para agregar una carrera, por favor rellene el siguiente formulario.</span>
-  </div>
-    <form class="form theme-form" method="post" action="{% url 'carreras_agregar' %}" enctype="multipart/form-data" id ="carrera-form">
+    <div class="card-header pb-0">
+        <h5>Añadir</h5><span>Para agregar una carrera, por favor rellene el siguiente formulario.</span>
+    </div>
+    <form class="form theme-form" method="post" action="{% url 'carreras_agregar' %}" enctype="multipart/form-data"
+        id="carrera-form">
         <div class="card-body">
             {% csrf_token %}
             {{ form|crispy }}
@@ -16,9 +17,9 @@
     </form>
     <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             // Agregar evento de escucha para el evento "submit" del formulario
-            $('#carrera-form').on('submit', function(event) {
+            $('#carrera-form').on('submit', function (event) {
                 // Detener la acción por defecto del formulario
                 event.preventDefault();
                 // Obtener los valores de los campos del formulario
@@ -39,6 +40,8 @@
                     $('#carrera-form-errors').html(errors.join('<br>'));
                     return;
                 }
+                // Disable submit button to prevent double submission
+                $(this).find('button[type="submit"]').prop('disabled', true);
                 // Enviar el formulario si los campos son válidos
                 this.submit();
             });

@@ -118,7 +118,7 @@
           <tbody>
             {% for convenio in convenios_proximos_expirar %}
             <tr>
-              <td>{{ convenio.numConvenio }}</td>
+              <td>{{ convenio.idEmpresa.razonSocial }}</td>
               <td>{{ convenio.finVigencia }}</td>
             </tr>
             {% endfor %}
