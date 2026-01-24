@@ -123,12 +123,12 @@ class ConvenioForm(UpperCaseMixin, ModelForm):
     class Meta:
         model = Convenio
         fields = ['idCarrera', 'inicioVigencia', 'finVigencia', 'idEmpresa', 'observaciones']
-    
-    uppercase_exempt_fields = ['observaciones']
         widgets = {
             'inicioVigencia': DateInput(),
             'finVigencia': DateInput(),
         }
+    
+    uppercase_exempt_fields = ['observaciones']
 
 
 # Formulario para filtrado de reportes:
