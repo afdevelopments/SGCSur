@@ -73,6 +73,8 @@ urlpatterns = [
     path('reportes/', views.reportes, name='reportes'),
     # exportar reporte
     path('export_convenios_excel/', views.export_convenios_excel, name='export_convenios_excel'),
+    path('reportes_contactos/', views.reportes_contactos, name='reportes_contactos'),
+    path('export_contactos_excel/', views.export_contactos_excel, name='export_contactos_excel'),
 
     # dashboard
 ]

@@ -1979,7 +1979,12 @@ from datetime import datetime
 @login_required(login_url="/login")
 def export_convenios_excel(request):
     # Use the utility function to apply the SAME filters as the dashboard
-    convenios, _, _ = filter_convenios(request.GET)
+    convenios, form, _ = filter_convenios(request.GET)
+    
+    # Check if user wants to include contacts
+    incluir_contactos = False
+    if form.is_valid():
+        incluir_contactos = form.cleaned_data.get('incluir_contactos', False)
 
     # Crear el archivo de Excel y agregar una hoja de trabajo
     workbook = Workbook()
@@ -1993,6 +1998,10 @@ def export_convenios_excel(request):
         'Nombre Empresa', 'ID Empresa', 'Giro Empresa', 'Sector Empresa',
         'Inicio de vigencia', 'Fin de vigencia', 'Observaciones'
     ]
+    
+    if incluir_contactos:
+        headers.append('Contactos de la Empresa')
+
     # Definir los estilos de celda para los estados de los convenios
     activo_fill = PatternFill(start_color="c3e6cb", end_color="c3e6cb", fill_type="solid")
     casi_expirado_fill = PatternFill(start_color="ffeeba", end_color="ffeeba", fill_type="solid")
@@ -2022,6 +2031,15 @@ def export_convenios_excel(request):
             convenio.finVigencia,
             convenio.observaciones,
         ]
+        
+        if incluir_contactos:
+            # Fetch contacts for this company
+            contactos = Contacto.objects.filter(idEmpresa=convenio.idEmpresa)
+            contacts_str = ""
+            for contacto in contactos:
+                contacts_str += f"{contacto.nombre} ({contacto.email} / {contacto.numTelefono})\n"
+            row_data.append(contacts_str.strip())
+
         for col_num, cell_value in enumerate(row_data, 1):
             cell = worksheet.cell(row=row_num, column=col_num)
             cell.value = cell_value
@@ -2042,6 +2060,74 @@ def export_convenios_excel(request):
     filename = f'convenios_{now}.xlsx'
     response['Content-Disposition'] = f'attachment; filename={filename}'
 
+    workbook.save(response)
+
+    return response
+
+@login_required(login_url="/login")
+def reportes_contactos(request):
+    from .utils import filter_contactos
+    from .forms import ReporteContactosForm
+
+    lista_contactos, form = filter_contactos(request.GET)
+    empresas = Empresa.objects.all().order_by('razonSocial')
+    
+    # If no GET params (initial load), explicit initialization not strictly needed 
+    # as util handles empty params gracefully, but good for clarity.
+    if not request.GET:
+        form = ReporteContactosForm()
+
+    context = {
+        'form': form,
+        'lista_contactos': lista_contactos,
+        'empresas': empresas,
+        'breadcrumb': {"parent": "Reportes", "child": "Reportes de contactos"}
+    }
+    return render(request, 'reportes/reportes_contactos.html', context)
+
+
+@login_required(login_url="/login")
+def export_contactos_excel(request):
+    from .utils import filter_contactos
+
+    contactos, form = filter_contactos(request.GET)
+
+    # Create Excel
+    workbook = Workbook()
+    worksheet = workbook.active
+    worksheet.title = "Contactos"
+
+    # Headers
+    headers = [
+        'ID Contacto', 'Nombre', 'Teléfono', 'Email',
+        'Empresa', 'ID Empresa', 'Giro Empresa'
+    ]
+
+    for col_num, header in enumerate(headers, 1):
+        col_letter = get_column_letter(col_num)
+        worksheet['{}1'.format(col_letter)] = header
+        worksheet.column_dimensions[col_letter].width = 25
+
+    # Fill data
+    for row_num, contacto in enumerate(contactos, 2):
+        row_data = [
+            contacto.idContacto,
+            contacto.nombre,
+            contacto.numTelefono,
+            contacto.email,
+            contacto.idEmpresa.razonSocial,
+            contacto.idEmpresa.idEmpresa,
+            contacto.idEmpresa.giro
+        ]
+
+        for col_num, cell_value in enumerate(row_data, 1):
+            cell = worksheet.cell(row=row_num, column=col_num)
+            cell.value = cell_value
+
+    response = HttpResponse(content_type='application/vnd.openxmlformats-officedocument.spreadsheetml.sheet')
+    now = datetime.now().strftime('%Y-%m-%d_%H-%M-%S')
+    filename = f'contactos_{now}.xlsx'
+    response['Content-Disposition'] = f'attachment; filename={filename}'
     workbook.save(response)
 
     return response

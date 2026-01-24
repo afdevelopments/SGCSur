@@ -107,6 +107,8 @@ class ReporteConveniosForm(forms.Form):
     estado = forms.ChoiceField(
         choices=[('activo', 'Activo'), ('casi_expirado', 'Casi expirado'), ('expirado', 'Expirado')],
         required=False)
+    incluir_contactos = forms.BooleanField(required=False, label="Incluir contactos")
+    sectores = forms.MultipleChoiceField(choices=Empresa.sectores, required=False, label="Sectores")
 
     def clean_fecha_vigencia(self):
         fecha_vigencia = self.cleaned_data.get('fecha_vigencia')
@@ -121,4 +123,13 @@ class ReporteConveniosForm(forms.Form):
             return result
         except (ValueError, IndexError):
             raise forms.ValidationError("El formato de fecha debe ser 'DD/MM/YYYY - DD/MM/YYYY'.")
+
+
+class ReporteContactosForm(forms.Form):
+    idEmpresa = forms.ModelMultipleChoiceField(queryset=Empresa.objects.all(), required=False)
+    estado_convenio = forms.ChoiceField(
+        choices=[('activo', 'Activo'), ('casi_expirado', 'Casi expirado'), ('expirado', 'Expirado'), ('sin_convenio', 'Sin convenio')],
+        required=False,
+        label="Estado del Convenio"
+    )
 

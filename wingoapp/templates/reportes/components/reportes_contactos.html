@@ -1,0 +1,76 @@
+{% load static %}
+{% load sass_tags %}
+{% load crispy_forms_tags %}
+<div class="card">
+    <div class="card-header pb-0">
+        <h5>Reporte de Contactos</h5><span>Filtre los contactos según sus preferencias.</span>
+    </div>
+    <div class="card-body">
+        <form method="GET" action="" class="theme-form">
+            {% csrf_token %}
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="idEmpresa">Empresa</label>
+                    <select class="js-example-placeholder-multiple col-sm-12" id="idEmpresa" name="idEmpresa"
+                        data-placeholder="Seleccione una empresa" multiple>
+                        {% for empresa in empresas %}
+                        <option value="{{ empresa.idEmpresa }}">
+                            ({{ empresa.idEmpresa }}) {{ empresa.razonSocial }}</option>
+                        {% endfor %}
+
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label for="id_estado_convenio">Estado del Convenio</label>
+                    <select class="form-control" id="id_estado_convenio" name="estado_convenio">
+                        <option value="">Todos</option>
+                        <option value="activo">Con convenio Activo</option>
+                        <option value="casi_expirado">Con convenio Casi Expirado</option>
+                        <option value="expirado">Con convenio Expirado</option>
+                        <option value="sin_convenio">Sin convenio</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <div class="col-md-12 text-center">
+                    <button type="submit" class="btn btn-primary me-2">Filtrar</button>
+                    <button type="submit" formaction="{% url 'export_contactos_excel' %}"
+                        class="btn btn-success">Descargar Excel</button>
+                </div>
+            </div>
+
+        </form>
+        {% if lista_contactos %}
+        <div class="table-primary mt-4">
+            <table class="display" id="basic-2">
+                <thead>
+                    <tr>
+                        <th>Nombre</th>
+                        <th>Teléfono</th>
+                        <th>Email</th>
+                        <th>Empresa</th>
+                        <th>Giro</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for contacto in lista_contactos %}
+                    <tr>
+                        <td>{{ contacto.nombre }}</td>
+                        <td>{{ contacto.numTelefono }}</td>
+                        <td>{{ contacto.email }}</td>
+                        <td>{{ contacto.idEmpresa.razonSocial }}</td>
+                        <td>{{ contacto.idEmpresa.giro }}</td>
+                    </tr>
+                    {% endfor %}
+            </table>
+        </div>
+        {% else %}
+        <div class="alert alert-warning inverse alert-dismissible fade show mt-4" role="alert"><i class="icon-bell"></i>
+            <p><b> ¡Sin registros! </b>No existen contactos con esos criterios.</p>
+            <button class="btn-close" type="button" data-bs-dismiss="alert" aria-label="Close"><span class="bg-warning"
+                    aria-hidden="true">dismiss</span></button>
+        </div>
+        {% endif %}
+    </div>
+</div>
